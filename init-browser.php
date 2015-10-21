@@ -11,7 +11,7 @@ function report($errno, $errstr, $errfile, $errline) {
 
   $msg = "($errfile:$errline) $errno: $errstr";
   error_log($msg);
-  exit("Error written to error log.");
+  exit("Error written to error log.\n");
 }
 function report_ex($e) {
 	report($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
@@ -36,7 +36,7 @@ mb_internal_encoding("UTF-8");
 # Security
 $test = getenv("TESTING") !== false;
 if (!$test && !isset($_SERVER["HTTP_X_REAL_IP"])) {
-	user_error("Nginx misconfigured, missing HTTP_X_REAL_IP", E_ERROR);
+	user_error("Nginx misconfigured, missing HTTP_X_REAL_IP");
 } else {
 	// Unittest fake the IP.
 	$_SERVER["HTTP_X_REAL_IP"] = "127.0.0.1";
@@ -66,7 +66,6 @@ if ($_CLIENT["test"]) {
 
 # Require path
 define("ROOT", realpath(dirname(__FILE__) . "/../../../") . "/");
-define("BASE", realpath(dirname(__FILE__) . "/../../") . "/");
 require BASE . 'vendor/autoload.php';
 # Taint (removing GET/POST/REQUEST against unsafe reads)
 core\Taint::init();
