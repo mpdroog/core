@@ -1,0 +1,25 @@
+{
+    "name": "mpdroog/core",
+    "description": "µLib for writing HTTP/CLI code.",
+    "homepage": "http://rootdev.nl/",
+    "license": ["MIT"],
+    "require": {
+        "php": ">=5.5.0",
+        "ext-curl": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-mbstring": "*",
+        "ext-mcrypt": "*",
+
+        "twig/twig": "1.18.1",
+        "pda/pheanstalk": "^3.0",
+        "ramsey/uuid": "^2.8",
+        "moontoast/math": "^1.1",
+    },
+
+	"autoload": {
+        "psr-0": {
+            "core\\": ""
+        }
+    }
+}
