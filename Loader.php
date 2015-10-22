@@ -36,4 +36,15 @@ class Loader {
 		}
 		require $path;
 	}
+
+	public static function worker() {
+		global $_CRON;
+		# Load requested worker
+		$path = TASK . "index.php";
+		if (! file_exists($path)) {
+			user_error("No such task: " . $_CRON["task"]);
+		}
+		# TODO: Abuse Redis to ensure only one instance is running?
+		require $path;
+	}
 }
