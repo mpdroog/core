@@ -1,10 +1,7 @@
 <?php
-/**
- * Initialize the basics.
- */
+header('Content-Type: text/html; charset=UTF-8');
+require dirname(__FILE__) . "/init.php";
 
-# Error handling
-error_reporting(E_STRICT);
 function report($errno, $errstr, $errfile, $errline) {
   header('HTTP/1.1 500 Internal Server Error');
   // TODO: Report error to devsys
@@ -13,25 +10,6 @@ function report($errno, $errstr, $errfile, $errline) {
   error_log($msg);
   exit("Error written to error log.\n");
 }
-function report_ex($e) {
-	report($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
-}
-function report_fatal() {
-	$error = error_get_last();
-	if( $error !== NULL) {
-		report(
-			E_CORE_ERROR, $error["message"],
-			$error["file"], $error["line"]
-		);
-	}
-}
-set_error_handler("report");
-set_exception_handler("report_ex");
-register_shutdown_function("report_fatal");
-
-# Encoding
-header('Content-Type: text/html; charset=UTF-8');
-mb_internal_encoding("UTF-8");
 
 # Security
 $test = getenv("TESTING") !== false;
@@ -64,12 +42,6 @@ if ($_CLIENT["test"]) {
 	$_CLIENT["today"] = "2015-09-01";
 }
 
-# Require path
-define("ROOT", realpath(dirname(__FILE__) . "/../../../") . "/");
-require BASE . 'core/Fn.php';
-require BASE . 'core/MdMail.php';
-require BASE . 'core/ProjectValidators.php';
-require BASE . 'vendor/autoload.php';
 # Taint (removing GET/POST/REQUEST against unsafe reads)
 core\Taint::init();
 # Prevent website usage if the user has been abusive.

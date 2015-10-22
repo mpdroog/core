@@ -1,6 +1,7 @@
 <?php
 namespace core;
 
+use core\Cli;
 use core\Taint;
 use core\Res;
 
@@ -20,5 +21,19 @@ class Loader {
 			Res::error("Page $req does not exist.");
 			exit;
 		}
+	}
+
+	public static function cli() {
+		global $_CRON;
+		# Load requested cron
+		$path = TASK . "index.php";
+		if (! file_exists($path)) {
+			user_error("No such task: " . $_CRON["task"]);
+		}
+		if (! Cli::platform_lock($_CRON["task"])) {
+			msg("Other server already processing task=" . $_CRON["task"]);
+			exit(0);
+		}
+		require $path;
 	}
 }
