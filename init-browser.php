@@ -66,6 +66,9 @@ if ($_CLIENT["test"]) {
 
 # Require path
 define("ROOT", realpath(dirname(__FILE__) . "/../../../") . "/");
+require BASE . 'core/Fn.php';
+require BASE . 'core/MdMail.php';
+require BASE . 'core/ProjectValidators.php';
 require BASE . 'vendor/autoload.php';
 # Taint (removing GET/POST/REQUEST against unsafe reads)
 core\Taint::init();
