@@ -14,12 +14,12 @@
         "twig/twig": "1.18.1",
         "pda/pheanstalk": "^3.0",
         "ramsey/uuid": "^2.8",
-        "moontoast/math": "^1.1",
+        "moontoast/math": "^1.1"
     },
 
 	"autoload": {
-        "psr-0": {
-            "core\\": ""
+        "psr-4": {
+            "core\\": "vendor/mpdroog/core"
         }
     }
 }
