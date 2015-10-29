@@ -26,7 +26,4 @@ mb_internal_encoding("UTF-8");
 
 # Require path
 define("ROOT", realpath(dirname(__FILE__) . "/../../../") . "/");
-require BASE . 'core/Fn.php';
-require BASE . 'core/MdMail.php';
-require BASE . 'core/ProjectValidators.php';
-require BASE . 'vendor/autoload.php';
+require ROOT . 'vendor/autoload.php';
