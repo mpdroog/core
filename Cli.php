@@ -29,6 +29,7 @@ class SyncShutdown {
 	}
 }
 
+/** CLI Helpers */
 class Cli {
 	/** Ensure we're the only cron running this task */
 	public static function platform_lock($key) {
@@ -64,4 +65,41 @@ class Cli {
 		return true;
 	}
 
+	/** Ask if user is sure */
+	public static function confirm($msg, $default = false) {
+		// Display
+		{
+			$defaultMsg = "[y|N]";
+			if ($default) {
+				$defaultMsg = "[Y|n]";
+			}
+			echo "$msg $defaultMsg";
+		}
+
+		// Read
+		$ok = false;
+		{
+			$handle = fopen ("php://stdin","r");
+			$line = fgets($handle);
+			echo "\n";
+			$cmp = strtolower(trim($line));
+			$ok = $cmp === "y";
+			if ($cmp === "") {
+				// Fallback if no value set
+				$ok = $default;
+			}
+		}
+		return $ok;
+	}
+
+	/** Show simple heading */
+	public static function heading($msg) {
+		echo "\n$msg\n=====================\n";
+	}
+
+	/** Show aligned text. */
+	public static function text($msg) {
+		$mask = "%15.15s | %s\n";
+		echo sprintf($mask, $key, $value);
+	}
 }

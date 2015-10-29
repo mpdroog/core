@@ -10,12 +10,19 @@
         "ext-pdo_mysql": "*",
         "ext-mbstring": "*",
         "ext-mcrypt": "*",
+        "ext-bcmath": "*",
 
         "twig/twig": "1.18.1",
         "pda/pheanstalk": "^3.0",
-        "ramsey/uuid": "^2.8",
-        "moontoast/math": "^1.1"
+        "lifo101/ip": "master"
     },
+
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lifo101/ip"
+        }
+    ],
 
 	"autoload": {
         "psr-4": {

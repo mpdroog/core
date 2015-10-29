@@ -2,7 +2,7 @@
 namespace core;
 use core\AES;
 use core\Helper;
-use core\Fn;
+use prj\Fn;
 
 /**
  * Session helpers.
@@ -43,10 +43,10 @@ class Session {
 	}
 
 	/* Require session and return session (on no session return 401 and stop) */
-	public static function req_session() {
+	public static function req() {
 		$sess = self::session();
 		if (! $sess) {
-			self::client_error("Please login and try again.", [], "401");
+			Res::error("Please login and try again.", [], "401");
 			exit;
 		}
 		return $sess;
@@ -59,5 +59,46 @@ class Session {
 			"uuid" => $uuid,
 			"counter" => $counter
 		]), $privkey);
+	}
+
+	/** Create cookie and begin session. */
+	public static function begin($uuid, $counter) {
+		$sess = json_encode([
+			"uuid" => $uuid,
+			"counter" => $counter,
+			"rand" => Helper::rand(8) /* never have the same cookie data */
+		]);
+
+		$privkey = Helper::config("security")["aeskey"];
+		$domain = Helper::config("general")["domain"];
+		$ok = setcookie(
+			"sessid",
+			AES::encode($sess, $privkey),
+			time()+60*60*24*60 /* 60 days */,
+			"/action/",
+			$domain,
+			true,
+			true
+		);
+		if (! $ok) {
+			user_error("Could not set cookie?");
+		}
+	}
+
+	/** Delete cookie and stop session. */
+	public static function destroy() {
+		$domain = Helper::config("general")["domain"];
+		$ok = setcookie(
+			"sessid",
+			null,
+			-1,
+			"/action/",
+			$domain,
+			true,
+			true
+		);
+		if (! $ok) {
+			user_error("Could not set cookie?");
+		}
 	}
 }

@@ -1,5 +1,6 @@
 <?php
 namespace core;
+use prj\HtmlMail;
 
 /**
  * Quick'n'Dirty Markdown parser.
@@ -9,7 +10,7 @@ namespace core;
  * and easily extend it with HTML+inline CSS for 'rich emails'
  */
 class DirtyMarkdown {
-	use MdMailStyle;
+	use HtmlMail;
 
 	/** Check if line only exists of '=' chars */
 	private static function is_heading($line) {

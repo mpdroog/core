@@ -205,7 +205,7 @@ class Db {
 	/**
 	 * Begin new transaction.
 	 */
-	public function txnBegin() {
+	public function txn() {
 		if ($this->db->beginTransaction() === false) {
 			user_error("db: Failed starting txn");
 		}

@@ -1,5 +1,6 @@
 <?php
 namespace core;
+use prj\ProjectValidators;
 
 /**
  * Hide GET/POST to enforce:

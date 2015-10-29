@@ -14,6 +14,7 @@ class Render {
 		]);
 		$args['rev'] = file_get_contents(ROOT . "assets.rev");
 		$args['site'] = Helper::config("general")["baseurl"];
+		$args['support'] = Helper::config("general")["support"];
 		$twig = new \Twig_Environment($loader);
 		return $twig->render('index', $args);
 	}
@@ -32,7 +33,7 @@ class Render {
 				DirtyMarkdown::parse($txt) .
 				file_get_contents(ROOT . "tpl/mail/foot.tpl")
 			,
-			"htmlEmbed" => MdMail::embeds() // TODO: broken assumption?
+			"htmlEmbed" => DirtyMarkdown::embeds()
 		];
 		// Always include uuid so user can access site
 		$out["html"] = str_replace("{{ uuid }}", $args["uuid"], $out["html"]);

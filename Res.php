@@ -12,7 +12,6 @@ class Res {
 	 * https://dev.twitter.com/overview/api/response-codes
 	 */
 	public static function error($msg, array $errors = [], $http="400") {
-		global $_CLIENT; // TODO: Taint?
 		if ($http === "400") {
 			header('HTTP/1.1 400 Bad request');
 		} elseif ($http === "500") {
@@ -24,11 +23,12 @@ class Res {
 		} else {
 			user_error(sprintf('TODO: HTTP-statusCode(%s) not implemented', $http));
 		}
-		if ($_CLIENT["encoding"] === "plain") {
+		$encoding = Helper::client("encoding");
+		if ($encoding === "plain") {
 			// Legacy sys
 			header("Content-Type: text/plain");
 			echo $msg;
-		} else if ($_CLIENT["encoding"] === "json") {
+		} else if ($encoding === "json") {
 			// JSON (API)
 			header("Content-Type: application/json");
 			echo json_encode([
@@ -37,14 +37,13 @@ class Res {
 			]);
 		} else {
 			// HTML (user friendly)
-			echo Render::render(ROOT . "tpl/err.tpl", ["msg" => $msg, "errors" => $errors]);
+			echo Render::page(ROOT . "tpl/err.tpl", ["msg" => $msg, "errors" => $errors]);
 		}
 	}
 
 	/** Show short success to client. */
 	public static function ok($msg, array $meta = []) {
-		global $_CLIENT;
-		if ($_CLIENT["encoding"] === "json") {
+		if ($encoding === "json") {
 			// JSON return
 			echo json_encode([
 				"msg" => $msg,

@@ -15,7 +15,7 @@ class Loader {
 		$path = BASE . "cmp/$req/index.php";
 
 		if (file_exists($path)) {
-			define("CMP", BASE . "cmp/$req/");
+			//define("CMP", BASE . "cmp/$req/");
 			require $path;
 		} else {
 			Res::error("Page $req does not exist.");
