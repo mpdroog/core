@@ -42,6 +42,6 @@ class Abuse {
 				"key" => $key
 			]);
 		}
-		error_log(sprintf("IP(%s) Abuse++(%s), cmp=%s comment=%s", $ip, $count, CMP, $comment));
+		error_log(sprintf("IP(%s) Abuse++(%s) comment=%s", $ip, $count, $comment));
 	}
 }
