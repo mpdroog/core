@@ -98,8 +98,16 @@ class Cli {
 	}
 
 	/** Show aligned text. */
-	public static function text($msg) {
+	public static function align($key, $value) {
 		$mask = "%15.15s | %s\n";
 		echo sprintf($mask, $key, $value);
+	}
+	public static function text($msg) {
+		echo $msg . "\n";
+	}
+
+	public static function cli() {
+		global $_CLI;
+		return $_CLI;
 	}
 }
