@@ -6,9 +6,9 @@ function report($errno, $errstr, $errfile, $errline) {
   exit(1);
 }
 
-// Init $_CRON with CLI task + args
+// Init $_CLI with CLI task + args
 $verbose = false;
-$_CRON = null;
+$_CLI = null;
 {
 	$args = $_SERVER["argv"];
 	$skip = 0;
@@ -23,43 +23,43 @@ $_CRON = null;
 		$args[$skip] = "help";
 	}
 
-	$_CRON = [
+	$_CLI = [
 		"test" => getenv("TESTING") !== false,
 		"task" => $args[$skip],
 		"args" => [],
 		"flags" => [],
 		"today" => date("Y-m-d")
 	];
-	if ($_CRON["test"]) {
-		$_CRON["today"] = "2015-09-01";
+	if ($_CLI["test"]) {
+		$_CLI["today"] = "2015-09-01";
 	}
 
 	foreach (array_slice($args, $skip+1) as $kvp) {
 		if (strpos($kvp, "=") !== false) {
 			list($key, $value) = explode("=", $kvp);
 			if (substr($key, 0, 1) === "-") {
-				$_CRON["flags"][$key] = $value;
+				$_CLI["flags"][$key] = $value;
 			} else {
-				$_CRON["args"][$key] = $value;
+				$_CLI["args"][$key] = $value;
 			}
 		} else {
 			if (substr($kvp, 0, 1) === "-") {
 				if ($kvp === "-v") {
 					$verbose = true;
 				} else if ($kvp === "--help") {
-					$_CRON["task"] = "help";
+					$_CLI["task"] = "help";
 				} else {
-					$_CRON["flags"][substr($kvp,1)] = true;
+					$_CLI["flags"][substr($kvp,1)] = true;
 				}
 			} else {
-				$_CRON["args"][$kvp] = true;
+				$_CLI["args"][$kvp] = true;
 			}
 		}
 	}
 }
 
-if (1 !== preg_match("/^[a-z0-9_]{2,}$/", $_CRON["task"])) {
-	user_error("Invalid task, value=" . $_CRON["task"]);
+if (1 !== preg_match("/^[a-z0-9_]{2,}$/", $_CLI["task"])) {
+	user_error("Invalid task, value=" . $_CLI["task"]);
 }
 
 # Less variables
@@ -68,7 +68,7 @@ unset($_POST);
 unset($_SERVER);
 
 define("VERBOSE", $verbose);
-define("TASK", BASE . sprintf("tasks/%s/", $_CRON["task"]));
+// TODO: define("TASK", BASE . sprintf("tasks/%s/", $_CLI["task"]));
 
 function msg($msg, array $args = []) {
 	global $verbose;
@@ -81,9 +81,9 @@ function msg($msg, array $args = []) {
 	error_log($msg);
 }
 
-if (! isset($_CRON["flags"]["w"])) {
+if (! isset($_CLI["flags"]["w"])) {
 	echo "WARN: Running in Read/Only Mode, add -w (write) flag.\n";
 }
 if ($verbose) {
-	var_dump($_CRON);
+	var_dump($_CLI);
 }
