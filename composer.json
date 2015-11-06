@@ -16,6 +16,7 @@
         "pda/pheanstalk": "^3.0",
         "lifo101/ip": "dev-master"
     },
+    "minimum-stability": "dev",
     "repositories": [
         {
             "type": "vcs",
