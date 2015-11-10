@@ -14,16 +14,9 @@
 
         "twig/twig": "1.18.1",
         "pda/pheanstalk": "^3.0",
-        "lifo101/ip": "master"
+        "lifo/ip": "master"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/lifo101/ip"
-        }
-    ],
-
-	"autoload": {
+    "autoload": {
         "psr-4": {
             "core\\": "./"
         }
