@@ -37,7 +37,7 @@ class Res {
 			]);
 		} else {
 			// HTML (user friendly)
-			echo Render::page(ROOT . "tpl/err.tpl", ["msg" => $msg, "errors" => $errors]);
+			echo Render::page("err", ["msg" => $msg, "errors" => $errors]);
 		}
 	}
 
