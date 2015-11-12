@@ -26,7 +26,15 @@ class Render {
 
 	/** Render(Markdown) $file with $args */
 	public static function mail($file, array $args = []) {
-		$txt = file_get_contents($file);
+		$lang = "en";
+		if (isset($_COOKIE["lang"])) {
+			$lang = strtolower($_COOKIE["lang"]);
+			if (! in_array($lang, ["nl", "en"])) {
+				$lang = "en";
+			}
+		}
+
+		$txt = file_get_contents(sprintf("%s%s_%s.md", TPL_MAIL, $file, $lang));
 		foreach ($args as $key => $val) {
 			$txt = str_replace("{{ $key }}", $val, $txt);
 		}
@@ -34,9 +42,9 @@ class Render {
 
 		$out = [
 			"text" => $txt,
-			"html" => file_get_contents(ROOT . "tpl/mail/head.tpl") .
+			"html" => file_get_contents(TPL_MAIL . "head.md") .
 				DirtyMarkdown::parse($txt) .
-				file_get_contents(ROOT . "tpl/mail/foot.tpl")
+				file_get_contents(TPL_MAIL . "foot.md")
 			,
 			"htmlEmbed" => DirtyMarkdown::embeds()
 		];

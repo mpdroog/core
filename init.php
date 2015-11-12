@@ -26,4 +26,6 @@ mb_internal_encoding("UTF-8");
 
 # Require path
 define("ROOT", realpath(dirname(__FILE__) . "/../../../") . "/");
+define("TPL_MAIL", ROOT . "tpl/mail/");
+define("TPL_PAGE", ROOT . "tpl/page/");
 require ROOT . 'vendor/autoload.php';
