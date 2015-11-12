@@ -15,7 +15,7 @@ class Abuse {
 		$blacklisted = $db->getCell("SELECT 1 FROM `blacklist_ip` WHERE ip=? AND active=?", [$ip, "1"]);
 		if ($blacklisted === "1") {
 			error_log(sprintf("Block IP(%s) due to abusive calls.", $ip));
-			Res::error("Sorry, We have banned you due to abuse.", [], "403");
+			Res::error(Fn::lang("core.abuse"), [], "403");
 			exit;
 		}
 	}

@@ -46,7 +46,7 @@ class Session {
 	public static function req() {
 		$sess = self::session();
 		if (! $sess) {
-			Res::error("Please login and try again.", [], "401");
+			Res::error(Fn::lang("core.session"), [], "401");
 			exit;
 		}
 		return $sess;
