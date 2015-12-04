@@ -81,7 +81,7 @@ function msg($msg, array $args = []) {
 	error_log($msg);
 }
 
-if (! isset($_CLI["flags"]["w"])) {
+if (! isset($_CLI["flags"]["w"]) && !$_CLI["test"]) {
 	echo "WARN: Running in Read/Only Mode, add -w (write) flag.\n";
 }
 if ($verbose) {
