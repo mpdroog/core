@@ -23,7 +23,7 @@ class Res {
 		} else {
 			user_error(sprintf('TODO: HTTP-statusCode(%s) not implemented', $http));
 		}
-		$encoding = Helper::client("encoding");
+		$encoding = Helper::client()["encoding"];
 		if ($encoding === "plain") {
 			// Legacy sys
 			header("Content-Type: text/plain");
