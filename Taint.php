@@ -90,8 +90,16 @@ class Taint {
         $errors[] = "encoding.$field";
         continue;
       }
+      // Check if we need to 'truncate' the value?
+      if (in_array("trim", $rules[$field])) {
+        $val = str_replace(" ", "", trim($val));
+      }
       // Check against rules
       foreach ($rules[ $field ] as $rule) {
+        if ($rule === "trim") {
+          // Ignore
+          continue;
+        }
         if (! self::$rule($val)) {
           $errors[] = "check.$field.$rule";
         }
