@@ -9,7 +9,15 @@ use prj\ProjectValidators;
  */
 trait TaintValidators {
   private static function email($val) {
-    return 1 === preg_match("/^.+@.+\..+$/i", $val);
+    // prevent: derp@@derp.com
+    // prevent: derp@derp.com.
+    // allow: mark+tag@gmail.com
+    $ok = 1 === preg_match("/^(([a-zA-Z]|[0-9])|([-]|[_]|[.]|[+]))+[@](([a-zA-Z0-9])|([-])){2,63}[.](([a-zA-Z0-9\.]){2,63})+$/i", $val);
+    if (substr($val, -1) === ".") {
+      // Don't allow dot at the end
+      $ok = false;
+    }
+    return $ok;
   }
   private static function cmp($val) {
     return 1 === preg_match("/^[a-z0-9_]{2,}\/[a-z0-9_]{2,}$/i", $val);
