@@ -1,6 +1,7 @@
 <?php
 namespace core;
 use Pheanstalk\Pheanstalk;
+use core\Helper;
 
 class Queue {
 	private static $queue;
@@ -11,6 +12,7 @@ class Queue {
 
 	/** Add job to beanstalkd and return job id */
 	public static function send($tube, array $data) {
+		$data["from"] = Helper::config("general")["mailbox_from"];
 		return self::$queue->useTube($tube)->put(json_encode($data));
 	}
 }
