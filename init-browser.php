@@ -13,11 +13,11 @@ function report($errno, $errstr, $errfile, $errline) {
 
 # Security
 $test = getenv("TESTING") !== false;
-if (!$test && !isset($_SERVER["HTTP_X_REAL_IP"])) {
-	user_error("Nginx misconfigured, missing HTTP_X_REAL_IP");
-} else {
+if ($test) {
 	// Unittest fake the IP.
 	$_SERVER["HTTP_X_REAL_IP"] = "127.0.0.1";
+} else if (!isset($_SERVER["HTTP_X_REAL_IP"])) {
+	user_error("Nginx misconfigured, missing HTTP_X_REAL_IP");
 }
 
 # Paranoia (try to expose as less as possible)
