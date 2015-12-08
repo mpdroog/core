@@ -35,4 +35,11 @@ class Helper {
 		global $_CLIENT;
 		$_CLIENT = $replacement;
 	}
+
+	public static function prefix($txt) {
+		return sprintf(
+			"%s-%s",
+			self::config("general")["syskey"]
+		);
+	}
 }
