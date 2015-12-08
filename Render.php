@@ -48,6 +48,10 @@ class Render {
 			,
 			"htmlEmbed" => DirtyMarkdown::embeds()
 		];
+		if (count($out["htmlEmbed"]) === 0) {
+			// Force to null against cannot unmarshal array
+			$out["htmlEmbed"] = null;
+		}
 		// Always include uuid so user can access site
 		$out["html"] = str_replace("{{ uuid }}", $args["uuid"], $out["html"]);
 		return $out;
