@@ -39,7 +39,8 @@ class Helper {
 	public static function prefix($txt) {
 		return sprintf(
 			"%s-%s",
-			self::config("general")["syskey"]
+			self::config("general")["syskey"],
+			$txt
 		);
 	}
 }
