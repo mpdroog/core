@@ -39,6 +39,7 @@ class Render {
 			$txt = str_replace("{{ $key }}", $val, $txt);
 		}
 		$txt = str_replace("{{ site }}", Helper::config("general")["baseurl"], $txt);
+		$txt = str_replace("{{ company }}", Helper::config("general")["name"], $txt);
 
 		$out = [
 			"text" => $txt,
