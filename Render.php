@@ -15,7 +15,6 @@ class Render {
 		]);
 		$args['rev'] = file_get_contents(ROOT . "assets.rev");
 		$args['site'] = Helper::config("general")["baseurl"];
-		//$args['support'] = Helper::config("general")["support"];
 		// TODO: cache?
 		$twig = new \Twig_Environment($loader, ["strict_variables" => true]);
 		$twig->addFunction(new \Twig_SimpleFunction("lang", function($key) {
@@ -40,6 +39,7 @@ class Render {
 		}
 		$txt = str_replace("{{ site }}", Helper::config("general")["baseurl"], $txt);
 		$txt = str_replace("{{ company }}", Helper::config("general")["name"], $txt);
+		$txt = str_replace("{{ support }}", Helper::config("general")["name"], $txt);
 
 		$out = [
 			"text" => $txt,
