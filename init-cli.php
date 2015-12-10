@@ -66,9 +66,7 @@ if (1 !== preg_match("/^[a-z0-9_\/]{2,}$/", $_CLI["task"])) {
 unset($_GET);
 unset($_POST);
 unset($_SERVER);
-
 define("VERBOSE", $verbose);
-// TODO: define("TASK", BASE . sprintf("tasks/%s/", $_CLI["task"]));
 
 function msg($msg, array $args = []) {
 	global $verbose;
@@ -76,9 +74,9 @@ function msg($msg, array $args = []) {
 		return;
 	}
 	if (count($args) > 0) {
-		$msg .= sprintf("%s\r\n", print_r($args, true));
+		$msg .= sprintf("%s\n", print_r($args, true));
 	}
-	error_log($msg);
+	echo $msg;
 }
 
 if (! isset($_CLI["flags"]["w"]) && !$_CLI["test"]) {
