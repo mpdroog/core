@@ -14,6 +14,7 @@ class Worker {
 			// Process 1 cmd in testing mode
 			$job = $queue->reserve(10);
 			msg(sprintf("Processing job (%d)", $job->getId()), [$job->getData()]);
+			$queue->bury($job);
 			$input = json_decode($job->getData(), true);
 
 			$fn($input);
