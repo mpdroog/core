@@ -4,7 +4,11 @@ namespace core;
 class DNS {
 	/** Strip domain from email */
 	public static function mail_domain($email) {
-		return mb_substr($email, 1+mb_strpos($email, "@"));
+		$idx = mb_strpos($email, "@");
+		if ($idx === false) {
+			user_error("DNS::mail_domain Not email=$email");
+		}
+		return mb_substr($email, 1+$idx);
 	}
 
 	/** Convert domain to IP (recursive func) */
