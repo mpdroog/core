@@ -32,6 +32,7 @@ $_CLI = null;
 	];
 	if ($_CLI["test"]) {
 		$_CLI["today"] = "2015-09-01";
+		$_CLIENT = ["test" => true]; // for db mocking
 	}
 
 	foreach (array_slice($args, $skip+1) as $kvp) {
