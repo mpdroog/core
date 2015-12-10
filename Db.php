@@ -72,8 +72,12 @@ trait DbOrm {
 		foreach (array_keys($values) as $key) {
 			$updates[] = sprintf("`%s` = ?", $key);
 		}
-		foreach (array_keys($where) as $key) {
-			$wheres[] = sprintf("`%s` = ?", $key);
+		foreach ($where as $key => $val) {
+			if ($val === null) {
+				$wheres[] = sprintf("`%s` IS ?", $key);
+			} else {
+				$wheres[] = sprintf("`%s` = ?", $key);
+			}
 		}
 		$query = sprintf(
 			"UPDATE `%s` SET %s WHERE %s",
@@ -82,19 +86,21 @@ trait DbOrm {
 			implode("AND ", $wheres)
 		);
 
+		$args = array_merge(
+			array_values($values), array_values($where)
+		);
 		$stmt = $this->query(
-			$query, array_merge(
-				array_values($values), array_values($where)
-			)
+			$query, $args
 		);
 		if ($row_count !== null) {
 			if ($stmt->rowCount() != $row_count) {
 				user_error(sprintf(
-					"db.update.affected expect=%s,affect=%s for query=%s",
-					$row_count, $stmt->rowCount(), $query
+					"db.update.affected expect=%s,affect=%s for query=%s args=%s",
+					$row_count, $stmt->rowCount(), $query, implode(", ", $args)
 				));
 			}
 		}
+		return $stmt->rowCount();
 	}
 
 	public function delete($table, array $where) {
