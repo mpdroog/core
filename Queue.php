@@ -12,7 +12,9 @@ class Queue {
 
 	/** Add job to beanstalkd and return job id */
 	public static function send($tube, array $data) {
-		$data["from"] = Helper::config("general")["mailbox_from"];
+		if ($tube === "email") {
+			$data["from"] = Helper::config("general")["mailbox_from"];
+		}
 		return self::$queue->useTube($tube)->put(json_encode($data));
 	}
 }
