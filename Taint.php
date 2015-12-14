@@ -11,8 +11,13 @@ trait TaintValidators {
   private static function email($val) {
     // prevent: derp@@derp.com
     // prevent: derp@derp.com.
+    // prevent: .derp@derp.com
     // allow: mark+tag@gmail.com
     $ok = 1 === preg_match("/^(([a-zA-Z]|[0-9])|([-]|[_]|[.]|[+]))+[@](([a-zA-Z0-9])|([-])){2,63}[.](([a-zA-Z0-9\.]){2,63})+$/i", $val);
+    if (substr($val, 0, 1) === ".") {
+      // Don't allow dot at the begin
+      $ok = false;
+    }
     if (substr($val, -1) === ".") {
       // Don't allow dot at the end
       $ok = false;
