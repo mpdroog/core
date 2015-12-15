@@ -116,6 +116,5 @@ class Cli {
 		$fd = fopen('php://stderr', 'w+');
 		fwrite($fd, "$msg\n");
 		fclose($fd);
-		exit(1);
 	}
 }
