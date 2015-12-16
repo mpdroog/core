@@ -75,9 +75,9 @@ function msg($msg, array $args = []) {
 		return;
 	}
 	if (count($args) > 0) {
-		$msg .= sprintf("%s\n", print_r($args, true));
+		$msg .= sprintf("\n%s", print_r($args, true));
 	}
-	echo $msg;
+	echo $msg . "\n";
 }
 
 if (! isset($_CLI["flags"]["w"]) && !$_CLI["test"]) {
