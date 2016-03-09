@@ -41,10 +41,12 @@ class EUTax {
 	/** Strip tax from $price */
 	public static function calc($country, $price) {
 		$rates = self::rates();
-		if (! isset($rates[$country])) {
-			$country = "NL"; // default to NL
+		$rate = null;
+		if (isset($rates[$country])) {
+			$rate = $rates[$country];
+		} else {
+			$rate = "0";
 		}
-		$rate = $rates[$country];
 
 		$factor = bcadd("1", bcdiv($rate, "100", 3), 3);
 		$ex = bcdiv($price, $factor, 3);
