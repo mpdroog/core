@@ -8,21 +8,17 @@ use prj\ProjectValidators;
  * - encoding checks
  */
 trait TaintValidators {
+  /**
+   * prevent: derp@@derp.com
+   * prevent: derp@derp.com.
+   * prevent: .derp@derp.com
+   * allow: mark+tag@gmail.com
+   * prevent: derp.@derp.com
+   * prevent: derp..@derp.com
+   */
   private static function email($val) {
-    // prevent: derp@@derp.com
-    // prevent: derp@derp.com.
-    // prevent: .derp@derp.com
-    // allow: mark+tag@gmail.com
-    $ok = 1 === preg_match("/^(([a-zA-Z]|[0-9])|([-]|[_]|[.]|[+]))+[@](([a-zA-Z0-9])|([-])){2,63}[.](([a-zA-Z0-9\.]){2,63})+$/i", $val);
-    if (substr($val, 0, 1) === ".") {
-      // Don't allow dot at the begin
-      $ok = false;
-    }
-    if (substr($val, -1) === ".") {
-      // Don't allow dot at the end
-      $ok = false;
-    }
-    return $ok;
+    require_once BASE . 'core/rfc822.php';
+    return is_valid_email_address($val, ["allow_comments" => false, "public_internet" => true]);
   }
   private static function cmp($val) {
     return 1 === preg_match("/^[a-z0-9_]{2,}\/[a-z0-9_]{2,}$/i", $val);
