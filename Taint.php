@@ -17,7 +17,7 @@ trait TaintValidators {
    * prevent: derp..@derp.com
    */
   private static function email($val) {
-    require_once BASE . 'core/rfc822.php';
+    require_once __DIR__ . '/rfc822.php';
     return is_valid_email_address($val, ["allow_comments" => false, "public_internet" => true]);
   }
   private static function cmp($val) {
