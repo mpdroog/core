@@ -58,6 +58,7 @@ $_CLI = null;
 		}
 	}
 }
+core\Cli::init($_CLI);
 
 if (1 !== preg_match("/^[a-z0-9_\/]{2,}$/", $_CLI["task"])) {
 	user_error("Invalid task, value=" . $_CLI["task"]);
