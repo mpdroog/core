@@ -6,9 +6,22 @@ use Lifo\IP\CIDR;
  * Global Helpers.
  */
 class Helper {
-	// Read conf.d/$name.json
+	// Read conf.d/$name(-test).json
+	// We use the -test version for keeping our
+	//  tests static and simple.
 	public static function config($name) {
-		return json_decode(file_get_contents(ROOT . "conf.d/$name.json"), true);
+		$files = [];
+		if (self::client()["test"]) {
+			$files[] = ROOT . "conf.d/$name-test.json";
+		}
+		$files[] = ROOT . "conf.d/$name.json";
+
+		foreach ($files as $file) {
+			if (file_exists($file)) {
+				return json_decode(file_get_contents($file), true);
+			}
+		}
+		user_error(sprintf("Helper::config(%s): File does not exist.", $name));
 	}
 
 	// Random value having a length of $len.
@@ -31,7 +44,7 @@ class Helper {
 		return $_CLIENT;
 	}
 
-	public static function client_new($replacement) {
+	public static function client_new(array $replacement) {
 		global $_CLIENT;
 		$_CLIENT = $replacement;
 	}
