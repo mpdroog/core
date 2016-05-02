@@ -80,10 +80,11 @@ trait DbOrm {
 			}
 		}
 		$query = sprintf(
-			"UPDATE `%s` SET %s WHERE %s",
+			"UPDATE `%s` SET %s WHERE %s %s",
 			$table,
 			implode(", ", $updates),
-			implode("AND ", $wheres)
+			implode("AND ", $wheres),
+			$row_count !== null ? "LIMIT $row_count" : ""
 		);
 
 		$args = array_merge(
@@ -92,6 +93,7 @@ trait DbOrm {
 		$stmt = $this->query(
 			$query, $args
 		);
+
 		if ($row_count !== null) {
 			if ($stmt->rowCount() != $row_count) {
 				user_error(sprintf(
