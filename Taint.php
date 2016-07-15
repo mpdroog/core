@@ -32,6 +32,18 @@ trait TaintValidators {
   private static function uint($val) {
     return 1 === preg_match("/^[0-9]+$/i", $val);
   }
+  private static function ip($val) {
+    return false !== filter_var($val, FILTER_VALIDATE_IP);
+  }
+  private static function money($val) {
+    return 1 === preg_match("/^[0-9]+\.[0-9]+$/i", $val);
+  }
+  private static function url($val) {
+    return false !== filter_var($val, FILTER_VALIDATE_URL);
+  }
+  private static function iso2($val) {
+    return 1 === preg_match("/^[a-zA-Z]{2}$/", $val);
+  }
 }
 
 /**
