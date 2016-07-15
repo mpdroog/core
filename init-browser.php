@@ -45,4 +45,4 @@ if ($_CLIENT["test"]) {
 # Taint (removing GET/POST/REQUEST against unsafe reads)
 core\Taint::init();
 # Prevent website usage if the user has been abusive.
-core\Abuse::req($_CLIENT["ip"]);
+#core\Abuse::req($_CLIENT["ip"]);
