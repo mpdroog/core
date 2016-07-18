@@ -60,4 +60,15 @@ class Res {
 		$base = Helper::config("general")["baseurl"];
 		header(sprintf("Location: %s/%s", $base, $relative));
 	}
+	/** HTTP redirect to external domain */
+	public static function redirect_external($url, $allowHTTP=false) {
+		$parts = parse_url($url);
+		if ($parts === false) {
+			user_error("Mailformed URL: $url");
+		}
+		if (!$allowHTTP && $parts["scheme"] !== "https") {
+			user_error("Redirect without https: $url");
+		}
+		header(sprintf("Location: %s", $url));
+	}
 }
