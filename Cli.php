@@ -137,7 +137,7 @@ class Cli {
 		return isset($cli["flags"]["w"]) ? $cli["flags"]["w"] : false;
 	}
 
-	private function exec($program, array $args = []) {
+	public static function exec($program, array $args = []) {
 		$fds = [
 			0 => ["pipe", "r"],
 			1 => ["pipe", "w"],
