@@ -136,4 +136,31 @@ class Cli {
 		$cli = self::cli();
 		return isset($cli["flags"]["w"]) ? $cli["flags"]["w"] : false;
 	}
+
+	private function exec($program, array $args = []) {
+		$fds = [
+			0 => ["pipe", "r"],
+			1 => ["pipe", "w"],
+			2 => ["pipe", "w"]
+		];
+		$cmd = $program;
+		foreach ($args as $arg) {
+			$cmd .= " " . escapeshellarg($arg);
+		}
+		$proc = proc_open($cmd, $fds, $pipes, null, null);
+		if ($proc === false) {
+			throw new \Exception("Failed calling proc_open");
+		}
+		fclose($pipes[0]); // close stdin
+
+		$out = [
+			"cmd" => $cmd,
+			"stdout" => stream_get_contents($pipes[1]),
+			"stderr" => stream_get_contents($pipes[2])
+		];
+		fclose($pipes[1]);
+		fclose($pipes[2]);
+		$out["exit"] = proc_close($proc);
+		return $out;
+	}
 }
