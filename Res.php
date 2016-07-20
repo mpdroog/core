@@ -63,7 +63,7 @@ class Res {
 	/** HTTP redirect to external domain */
 	public static function redirect_external($url, $allowHTTP=false) {
 		$parts = parse_url($url);
-		if ($parts === false) {
+		if ($parts === false || !isset($parts["scheme"])) {
 			user_error("Mailformed URL: $url");
 		}
 		if (!$allowHTTP && $parts["scheme"] !== "https") {
