@@ -171,6 +171,7 @@ class Db {
 
 	/**
 	 * Run query and get ALL data in associative array.
+	 * @return array|bool FALSE on failure
 	 */
 	public function getAll($query, array $args = []) {
 		$stmt = $this->query($query, $args);
@@ -179,6 +180,7 @@ class Db {
 
 	/**
 	 * Run query and get first row in associative array.
+	 * @return array|bool FALSE on failure
 	 */
 	public function getRow($query, array $args = []) {
 		$stmt = $this->query($query, $args);
@@ -192,6 +194,7 @@ class Db {
 
 	/**
 	 * Run query and get single value.
+	 * @return mixed|bool FALSE on failure
 	 */
 	public function getCell($query, array $args = []) {
 		$stmt = $this->query($query, $args);
@@ -200,6 +203,7 @@ class Db {
 
 	/**
 	 * Get columns as 1d array
+	 * @return array Empty array on failure
 	 */
 	public function getCol($query, array $args = []) {
 		$out = [];
@@ -212,6 +216,7 @@ class Db {
 
 	/**
 	 * Begin new transaction.
+	 * @return DbTxn
 	 */
 	public function txn() {
 		if ($this->db->beginTransaction() === false) {
