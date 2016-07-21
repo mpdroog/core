@@ -13,6 +13,9 @@ class Worker {
 		if ($_CLI["test"]) {
 			// Process 1 cmd in testing mode
 			$job = $queue->reserve(10);
+			if ($job === false) {
+				user_error("No job in queue, timed-out after 10sec");
+			}
 			msg(sprintf("Processing job (%d)", $job->getId()), [$job->getData()]);
 			$queue->bury($job);
 			$input = json_decode($job->getData(), true);
