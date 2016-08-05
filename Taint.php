@@ -47,6 +47,9 @@ trait TaintValidators {
   private static function iso2($val) {
     return 1 === preg_match("/^[a-zA-Z]{2}$/", $val);
   }
+  private static function fragment($val) {
+    return is_array($val);
+  }
 }
 
 /**
@@ -74,7 +77,49 @@ class Taint {
     return 1;
   }
 
-  private static function check($out, array $data) {
+  private static function check_array(array $val, array $rules) {
+    $errors = ["type" => "err"];
+    $output = ["type" => "ok"];
+    // Check against rules
+    foreach ($rules as $rule) {
+      if ($rule === "fragment") {
+        continue;
+      }
+      $idx = mb_strpos($rule, "=");
+      if ($idx !== false) {
+        // Key=value
+        $k = mb_substr($rule, 0, $idx);
+        $v = mb_substr($rule, $idx+1);
+        if ($k !== "subtype") {
+          $errors[] = "subtype.invalid.$k";
+          continue;
+        }
+        if (! class_exists($v)) {
+          $errors[] = "subtype.nosuchclass.$v";
+          continue;
+        }
+        // Start recursion
+        foreach ($val as $idx => $line) {
+          $res = self::check(new $v, $line, "[$idx]");
+          if (is_array($res)) {
+            $errors = array_merge($errors, $res);
+          } else {
+            $output[] = $res;
+          }
+        }
+      } else {
+        var_dump($data);
+        user_error("Only supporting array with subtype validation");
+      }
+    }
+
+    if (count($errors) > 1) {
+      return $errors;
+    }
+    return $output;
+  }
+
+  private static function check($out, array $data, $prefix="") {
     $fields = array_keys(get_object_vars($out));
     $errors = [];
     $rules = $out->rules();
@@ -87,36 +132,53 @@ class Taint {
           // Optional field and no value, skip
           continue;
         }
-        $errors[] = "none.$field";
+        $errors[] = "none.$field$prefix";
         continue;
       }
 
       $count++;
       $val = $data[ $field ];
-      if ($val === "" && in_array("opt", $rules[$field])) {
-        // Optional field and no value, skip
-        continue;
-      }
 
-      // Check if encoding is OK
-      if (! self::encodingOk($val)) {
-        $errors[] = "encoding.$field";
-        continue;
-      }
-      // Check if we need to 'truncate' the value?
-      if (in_array("trim", $rules[$field])) {
-        $val = str_replace(" ", "", trim($val));
-      }
-      // Check against rules
-      foreach ($rules[ $field ] as $rule) {
-        if ($rule === "trim") {
-          // Ignore
+      if (is_array($val)) {
+        // Check if we accept an array type
+        if (! in_array("fragment", $rules[$field])) {
+          $errors[] = "array.$field$prefix";
           continue;
         }
-        if (! self::$rule($val)) {
-          $errors[] = "check.$field.$rule";
+        $val = self::check_array($val, $rules[$field]);
+        $type = $val["type"]; unset($val["type"]);
+        if ($type === "err") {
+          $errors = array_merge($errors, $val);
+          continue;
+        }
+
+      } else {
+        if ($val === "" && in_array("opt", $rules[$field])) {
+          // Optional field and no value, skip
+          continue;
+        }
+
+        // Check if encoding is OK
+        if (! self::encodingOk($val)) {
+          $errors[] = "encoding.$field$prefix";
+          continue;
+        }
+        // Check if we need to 'truncate' the value?
+        if (in_array("trim", $rules[$field])) {
+          $val = str_replace(" ", "", trim($val));
+        }
+        // Check against rules
+        foreach ($rules[ $field ] as $rule) {
+          if ($rule === "trim") {
+            // Ignore
+            continue;
+          }
+          if (! self::$rule($val)) {
+            $errors[] = "check.$field$prefix.$rule";
+          }
         }
       }
+
       if (count($errors) > 0) {
         continue;
       }
@@ -128,7 +190,7 @@ class Taint {
       // More fields than $out, find out which
       foreach (array_keys($data) as $field) {
         if (! in_array($field, $fields, TRUE)) {
-          $errors[] = "extra.$field";
+          $errors[] = "extra.$field$prefix";
         }
       }
     }
@@ -150,6 +212,9 @@ class Taint {
     if (! is_array($input)) {
       return [];
     }
+    return self::check($out, $input);
+  }
+  public static function raw($out, $input) {
     return self::check($out, $input);
   }
 
