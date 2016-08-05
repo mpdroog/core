@@ -52,12 +52,22 @@ trait TaintValidators {
   }
 }
 
+trait ArrayValidators {
+  private static function min(array $val, $count) {
+    return count($val) >= $count;
+  }
+  private static function max(array $val, $count) {
+    return count($val) <= $count;
+  }
+}
+
 /**
  * Validate user input.
  */
 class Taint {
   use TaintValidators;
   use ProjectValidators;
+  use ArrayValidators;
   private static $get = [];
   private static $post = [];
 
@@ -77,7 +87,7 @@ class Taint {
     return 1;
   }
 
-  private static function check_array(array $val, array $rules) {
+  private static function check_array(array $val, array $rules, $prefix="") {
     $errors = ["type" => "err"];
     $output = ["type" => "ok"];
     // Check against rules
@@ -90,12 +100,16 @@ class Taint {
         // Key=value
         $k = mb_substr($rule, 0, $idx);
         $v = mb_substr($rule, $idx+1);
+
         if ($k !== "subtype") {
-          $errors[] = "subtype.invalid.$k";
+          if (! self::$k($val, $v)) {
+            $errors[] = "$prefix.subtype.$k.$v";
+          }
           continue;
         }
+
         if (! class_exists($v)) {
-          $errors[] = "subtype.nosuchclass.$v";
+          $errors[] = "$prefix.subtype.nosuchclass.$v";
           continue;
         }
         // Start recursion
@@ -145,7 +159,7 @@ class Taint {
           $errors[] = "array.$field$prefix";
           continue;
         }
-        $val = self::check_array($val, $rules[$field]);
+        $val = self::check_array($val, $rules[$field], $field);
         $type = $val["type"]; unset($val["type"]);
         if ($type === "err") {
           $errors = array_merge($errors, $val);
