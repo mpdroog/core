@@ -26,6 +26,9 @@ trait TaintValidators {
   private static function slug($val) {
     return 1 === preg_match("/^[a-z0-9_]{2,}$/i", $val);
   }
+  private static function date($val) {
+    return 1 === preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i", $val);
+  }
   private static function datetime($val) {
     return 1 === preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$/i", $val);
   }
@@ -49,6 +52,9 @@ trait TaintValidators {
   }
   private static function fragment($val) {
     return is_array($val);
+  }
+  private static function text($val) {
+    return !is_array($val) && !is_object($val);
   }
 }
 
