@@ -221,6 +221,13 @@ class Taint {
     return $out;
   }
 
+  public static function post_count() {
+    return count(self::$post);
+  }
+  public static function get_count() {
+    return count(self::$get);
+  }
+
   public static function post($out) {
     return self::check($out, self::$post);
   }
