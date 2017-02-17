@@ -34,6 +34,15 @@ trait TestUtils {
 		}
 	}
 
+	private static function buried($queue) {
+		try {
+			$queue = Helper::prefix($queue);
+			return self::$queue->statsTube($queue)["current-jobs-buried"];
+		} catch (\Exception $e) {
+			return 0;
+		}
+	}
+
 	private static function verbose($task, $text, $iswrite = false) {
 		$a = [
 			"test" => true,
