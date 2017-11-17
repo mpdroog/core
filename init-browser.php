@@ -28,11 +28,21 @@ foreach (["HTTP_ACCEPT_LANGUAGE", "HTTP_USER_AGENT", "HTTP_ACCEPT"] as $key) {
 	}
 }
 
+# Simple referer check
+# You still need to ensure the HOST is not blindly forwarded by Nginx
+$refok = false;
+{
+	$domain = str_replace("https://", "", str_replace("http://", "", $_SERVER["HTTP_REFERER"]));
+	$domain = substr($domain, 0, strpos($domain, "/"));
+	$refok = $domain === $_SERVER["HTTP_HOST"];
+}
+
 $_CLIENT = [
 	"test" => $test,
 	"today" => date("Y-m-d"),
 	"ip" => $_SERVER["HTTP_X_REAL_IP"],
 	"uniq" => sha1($uniq),
+	"referer_ok" => $refok,
 	"encoding" => isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json" ? "json" : "html"
 ];
 # Remove SERVER to force clean code
