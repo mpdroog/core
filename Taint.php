@@ -24,7 +24,7 @@ trait TaintValidators {
     return 1 === preg_match("/^[a-z0-9\-]{2,}$/i", $val);
   }
   private static function slug($val) {
-    return 1 === preg_match("/^[a-z0-9_]{2,}$/i", $val);
+    return 1 === preg_match("/^[a-z0-9_\-]{2,}$/i", $val);
   }
   private static function date($val) {
     return 1 === preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/i", $val);
@@ -55,6 +55,9 @@ trait TaintValidators {
   }
   private static function text($val) {
     return !is_array($val) && !is_object($val);
+  }
+  private static function bytes($val) {
+    return 1 === preg_match("/^[0-9]+\.*[0-9]* (B|KB|GB|TB)$/i", $val);
   }
 }
 
@@ -98,6 +101,54 @@ class Taint {
     $output = ["type" => "ok"];
     // Check against rules
     foreach ($rules as $rule) {
+      if ($rule === "subarray") {
+        continue;
+      }
+      $idx = mb_strpos($rule, "=");
+      if ($idx !== false) {
+        // Key=value
+        $k = mb_substr($rule, 0, $idx);
+        $v = mb_substr($rule, $idx+1);
+
+        if ($k !== "subtype") {
+          if (! self::$k($val, $v)) {
+            $errors[] = "$prefix.subtype.$k.$v";
+          }
+          continue;
+        }
+
+        if (! class_exists($v)) {
+          $errors[] = "$prefix.subtype.nosuchclass.$v";
+          continue;
+        }
+        if (! is_array($val)) {
+          $errors[] = "$prefix.subtype.notsubarray.$v";
+          continue;
+        }
+
+        $res = self::check(new $v, $val);
+        if (is_array($res)) {
+          $errors = array_merge($errors, $res);
+        } else {
+          $output[] = $res;
+        }
+      } else {
+        var_dump($data);
+        user_error("Only supporting array with subtype validation");
+      }
+    }
+
+    if (count($errors) > 1) {
+      return $errors;
+    }
+    return $output;
+  }
+
+  private static function check_fragment(array $val, array $rules, $prefix="") {
+    $errors = ["type" => "err"];
+    $output = ["type" => "ok"];
+    // Check against rules
+    foreach ($rules as $rule) {
       if ($rule === "fragment") {
         continue;
       }
@@ -120,6 +171,10 @@ class Taint {
         }
         // Start recursion
         foreach ($val as $idx => $line) {
+          if (! is_array($line)) {
+            $errors[] = "$prefix.subtype.notfragment.$v";
+            continue;
+          }
           $res = self::check(new $v, $line, "[$idx]");
           if (is_array($res)) {
             $errors = array_merge($errors, $res);
@@ -160,12 +215,19 @@ class Taint {
       $val = $data[ $field ];
 
       if (is_array($val)) {
-        // Check if we accept an array type
+        if (in_array("subarray", $rules[$field])) {
+          $val = self::check_array($val, $rules[$field], $field);
+          $type = $val["type"]; unset($val["type"]);
+          if ($type === "err") {
+            $errors = array_merge($errors, $val);
+          }
+          continue;
+        }
         if (! in_array("fragment", $rules[$field])) {
           $errors[] = "array.$field$prefix";
           continue;
         }
-        $val = self::check_array($val, $rules[$field], $field);
+        $val = self::check_fragment($val, $rules[$field], $field);
         $type = $val["type"]; unset($val["type"]);
         if ($type === "err") {
           $errors = array_merge($errors, $val);
