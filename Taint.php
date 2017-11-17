@@ -32,6 +32,9 @@ trait TaintValidators {
   private static function datetime($val) {
     return 1 === preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}$/i", $val);
   }
+  private static function datetimesec($val) {
+    return 1 === preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/i", $val);
+  }
   private static function uint($val) {
     return 1 === preg_match("/^[0-9]+$/i", $val);
   }
@@ -130,7 +133,7 @@ class Taint {
         if (is_array($res)) {
           $errors = array_merge($errors, $res);
         } else {
-          $output[] = $res;
+          $output["val"] = $res;
         }
       } else {
         var_dump($data);
@@ -183,7 +186,7 @@ class Taint {
           }
         }
       } else {
-        var_dump($data);
+        var_dump($val);
         user_error("Only supporting array with subtype validation");
       }
     }
@@ -203,7 +206,7 @@ class Taint {
     foreach ($fields as $field) {
       // Check if field exists
       if (! isset($data[ $field ])) {
-        if (in_array("opt", $rules[$field])) {
+        if (in_array("opt", $rules[$field]) || in_array("fragment", $rules[$field])) {
           // Optional field and no value, skip
           continue;
         }
@@ -220,18 +223,21 @@ class Taint {
           $type = $val["type"]; unset($val["type"]);
           if ($type === "err") {
             $errors = array_merge($errors, $val);
+            continue;
           }
-          continue;
-        }
-        if (! in_array("fragment", $rules[$field])) {
-          $errors[] = "array.$field$prefix";
-          continue;
-        }
-        $val = self::check_fragment($val, $rules[$field], $field);
-        $type = $val["type"]; unset($val["type"]);
-        if ($type === "err") {
-          $errors = array_merge($errors, $val);
-          continue;
+          $val = $val["val"];
+        } else if (in_array("fragment", $rules[$field])) {
+          $val = self::check_fragment($val, $rules[$field], $field);
+          $type = $val["type"]; unset($val["type"]);
+          if ($type === "err") {
+            $errors = array_merge($errors, $val);
+            continue;
+          }
+        } else {
+          if (! in_array("fragment", $rules[$field])) {
+            $errors[] = "array.$field$prefix";
+            continue;
+          }
         }
 
       } else {
