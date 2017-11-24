@@ -99,7 +99,7 @@ class Taint {
     return 1;
   }
 
-  private static function check_array(array $val, array $rules, $prefix="") {
+  private static function check_subarray(array $val, array $rules, $prefix="") {
     $errors = ["type" => "err"];
     $output = ["type" => "ok"];
     // Check against rules
@@ -197,6 +197,34 @@ class Taint {
     return $output;
   }
 
+  private static function check_array(array $vals, array $rules, $prefix="") {
+    $errors = ["type" => "err"];
+    $output = ["type" => "ok"];
+
+    foreach ($vals as $idx => $val) {
+      $ok = true;
+      // Check against rules
+      foreach ($rules as $rule) {
+        if ($rule === "array") {
+          continue;
+        }
+        $v = null;
+        if (! self::$rule($val, null)) {
+          $errors[] = "$prefix.array[$idx].$rule";
+          $ok = false;
+        }
+      }
+      if ($ok) {
+        $output["val"][] = $val;
+      }
+    }
+
+    if (count($errors) > 1) {
+      return $errors;
+    }
+    return $output;
+  }
+
   private static function check($out, array $data, $prefix="") {
     $fields = array_keys(get_object_vars($out));
     $errors = [];
@@ -219,7 +247,7 @@ class Taint {
 
       if (is_array($val)) {
         if (in_array("subarray", $rules[$field])) {
-          $val = self::check_array($val, $rules[$field], $field);
+          $val = self::check_subarray($val, $rules[$field], $field);
           $type = $val["type"]; unset($val["type"]);
           if ($type === "err") {
             $errors = array_merge($errors, $val);
@@ -234,8 +262,17 @@ class Taint {
             continue;
           }
         } else {
-          if (! in_array("fragment", $rules[$field])) {
-            $errors[] = "array.$field$prefix";
+          if (in_array("array", $rules[$field])) {
+            $val = self::check_array($val, $rules[$field], $field);
+            $type = $val["type"]; unset($val["type"]);
+            if ($type === "err") {
+              $errors = array_merge($errors, $val);
+              continue;
+            }
+            $val = $val["val"];
+          } else {
+            // cannot handle input
+            $errors[] = "notarray.$field";
             continue;
           }
         }
