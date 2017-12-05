@@ -234,7 +234,7 @@ class Taint {
     foreach ($fields as $field) {
       // Check if field exists
       if (! isset($data[ $field ])) {
-        if (in_array("opt", $rules[$field]) || in_array("fragment", $rules[$field])) {
+        if (in_array("opt", $rules[$field])) {
           // Optional field and no value, skip
           continue;
         }
