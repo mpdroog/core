@@ -32,9 +32,11 @@ foreach (["HTTP_ACCEPT_LANGUAGE", "HTTP_USER_AGENT", "HTTP_ACCEPT"] as $key) {
 # You still need to ensure the HOST is not blindly forwarded by Nginx
 $refok = false;
 {
-	$domain = str_replace("https://", "", str_replace("http://", "", $_SERVER["HTTP_REFERER"]));
-	$domain = substr($domain, 0, strpos($domain, "/"));
-	$refok = $domain === $_SERVER["HTTP_HOST"];
+	if (isset($_SERVER["HTTP_REFERER"])) {
+		$domain = str_replace("https://", "", str_replace("http://", "", $_SERVER["HTTP_REFERER"]));
+		$domain = substr($domain, 0, strpos($domain, "/"));
+		$refok = $domain === $_SERVER["HTTP_HOST"];
+	}
 }
 
 $_CLIENT = [
