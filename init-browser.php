@@ -45,7 +45,8 @@ $_CLIENT = [
 	"ip" => $_SERVER["HTTP_X_REAL_IP"],
 	"uniq" => sha1($uniq),
 	"referer_ok" => $refok,
-	"encoding" => isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json" ? "json" : "html"
+	"encoding" => isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json" ? "json" : "html",
+        "http_method" => $_SERVER['REQUEST_METHOD']
 ];
 # Remove SERVER to force clean code
 unset($_SERVER);
