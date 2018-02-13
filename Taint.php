@@ -366,4 +366,16 @@ class Taint {
     unset(self::$get[$name]);
     return $val;
   }
+
+  /** Return field if valid by rules (also unset value) */
+  public static function rawField($val, array $rules) {
+    $ok = 1;
+    foreach ($rules as $rule) {
+      $ok &= self::$rule($val);
+    }
+    if ($ok === 0) {
+      return false;
+    }
+    return $val;
+  }
 }
