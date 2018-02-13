@@ -55,4 +55,16 @@ class Render {
 		}
 		return $out;
 	}
+
+	// Black magic for dead-simple template rendering
+	// arg0 = file
+	// arg1 = args as array
+	public static function php() {
+		ob_start();
+		{
+			extract(func_get_arg(1));
+			include func_get_arg(0);
+		}
+		return ob_get_clean();
+	}
 }
