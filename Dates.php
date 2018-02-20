@@ -12,4 +12,25 @@ class Dates {
 		$addl = $date % $step;
 		return $date - $addl;
 	}
+
+	// Get $entries related from $today in upcoming years
+	public static function years($today, $entries = 6) {
+		$year = strtotime($today);
+		if ($year === false) {
+			return false;
+		}
+		$out = array(date("Y", $year));
+
+		for ($i = 1; $i < $entries; $i++) {
+			$year = strtotime("+1 year", $year);
+			if ($year === false) {
+				return false;
+			}
+			$out[] = date("Y", $year);
+		}
+		if (! arsort($out)) {
+			return false;
+		}
+		return array_values($out);
+	}
 }
