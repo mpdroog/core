@@ -367,6 +367,22 @@ class Taint {
     return $val;
   }
 
+  public static function postField($name, array $rules) {
+    if (! isset(self::$post[$name])) {
+      return false;
+    }
+    $val = self::$post[$name];
+    $ok = 1;
+    foreach ($rules as $rule) {
+      $ok &= self::$rule($val);
+    }
+    if ($ok === 0) {
+      return false;
+    }
+    unset(self::$post[$name]);
+    return $val;
+  }
+
   /** Return field if valid by rules (also unset value) */
   public static function rawField($val, array $rules) {
     $ok = 1;
