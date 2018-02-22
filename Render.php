@@ -6,23 +6,6 @@ use core\Helper;
 use prj\Fn;
 
 class Render {
-	/** Render(Twig) $file with $args */
-	public static function page($file, array $args = []) {
-		$loader = new \Twig_Loader_Array([
-			'head' => file_get_contents(TPL_PAGE . "head.tpl"),
-			'foot' => file_get_contents(TPL_PAGE . "foot.tpl"),
-			'index' => file_get_contents(TPL_PAGE . $file . ".tpl")
-		]);
-		$args['rev'] = file_get_contents(ROOT . "assets.rev");
-		$args['site'] = Helper::config("general")["baseurl"];
-		// TODO: cache?
-		$twig = new \Twig_Environment($loader, ["strict_variables" => true]);
-		$twig->addFunction(new \Twig_SimpleFunction("lang", function($key) {
-			return Fn::lang($key);
-		}));
-		return $twig->render('index', $args);
-	}
-
 	/** Render(Markdown) $file with $args */
 	public static function mail($file, array $args = []) {
 		$lang = "en";

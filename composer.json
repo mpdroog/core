@@ -12,7 +12,6 @@
         "ext-mcrypt": "*",
         "ext-bcmath": "*",
 
-        "twig/twig": "1.18.1",
         "pda/pheanstalk": "^3.0",
         "lifo/ip": "master"
     },
