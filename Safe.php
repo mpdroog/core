@@ -20,6 +20,6 @@ class Safe {
 	 */
 	public static function decode($value, $privKey) {
 		$key = Key::loadFromAsciiSafeString($privKey);
-		return Crypto::decrypt(base64_decode($value), $privKey, true);
+		return Crypto::decrypt(base64_decode($value), $key, true);
 	}
 }
