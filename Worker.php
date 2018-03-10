@@ -3,7 +3,7 @@ namespace core;
 use Pheanstalk\Pheanstalk;
 
 class Worker {
-	public static function listen($channel, $fn) {
+	public static function listen($channel, $fn, $expect="json") {
 		global $_CLI;
 
 		$queue = new Pheanstalk("127.0.0.1");
@@ -16,9 +16,17 @@ class Worker {
 			if ($job === false) {
 				user_error("No job in queue, timed-out after 10sec");
 			}
-			msg(sprintf("Processing job (%d)", $job->getId()), [$job->getData()]);
+                        $input = $job->getData();
+			msg(sprintf("Processing job (%d)", $job->getId()), [$input]);
 			$queue->bury($job);
-			$input = json_decode($job->getData(), true);
+
+                        if ($expect === "json") {
+			    $input = json_decode($input, true);
+                        } else if ($expect === "string") {
+                            // nothing to do
+                        } else {
+                            user_error("Invalid expect=$expect");
+                        }
 
 			$fn($input);
 			$queue->delete($job);
@@ -26,11 +34,19 @@ class Worker {
 		}
 		while (true) {
 			$job = $queue->reserve();
-			msg(sprintf("Processing job (%d)", $job->getId()), [$job->getData()]);
+                        $input = $job->getData();
+			msg(sprintf("Processing job (%d)", $job->getId()), [$input]);
 			// Bury by default (no retry on failure)
 			// On success the job is deleted
 			$queue->bury($job);
-			$input = json_decode($job->getData(), true);
+
+                        if ($expect === "json") {
+                            $input = json_decode($input, true);
+                        } else if ($expect === "string") {
+                            // nothing to do
+                        } else {
+                            user_error("Invalid expect=$expect");
+                        }
 
 			$fn($input);
 			$queue->delete($job);
