@@ -49,7 +49,9 @@ $_CLIENT = [
         "http_method" => $_SERVER['REQUEST_METHOD']
 ];
 # Remove SERVER to force clean code
-unset($_SERVER);
+if (! isset($no_strict)) {
+    unset($_SERVER);
+}
 if ($_CLIENT["test"]) {
 	// Set date to dummy for testing
 	$_CLIENT["today"] = "2015-09-01";
