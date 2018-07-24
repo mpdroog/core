@@ -26,7 +26,16 @@ class Helper {
 
 	// Random value having a length of $len.
 	public static function rand($len) {
-		return \bin2hex(\mcrypt_create_iv($len+1, MCRYPT_DEV_URANDOM));
+		$token = "";
+		$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		$codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+		$codeAlphabet.= "0123456789";
+		$max = strlen($codeAlphabet); // edited
+
+		for ($i=0; $i < $length; $i++) {
+			$token .= $codeAlphabet[random_int(0, $max-1)];
+		}
+		return $token;
 	}
 
 	/** Check if $ip is in $cidrs (ranges) */

@@ -9,8 +9,6 @@
         "ext-pdo": "*",
         "ext-pdo_mysql": "*",
         "ext-mbstring": "*",
-        "ext-mcrypt": "*",
-        "ext-bcmath": "*",
 
         "pda/pheanstalk": "^3.0",
         "lifo/ip": "master"
