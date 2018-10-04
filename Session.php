@@ -46,7 +46,8 @@ class Session {
 	public static function req() {
 		$sess = self::session();
 		if (! $sess) {
-			Res::error(Fn::lang("core.session"), [], "401");
+			Res::error(401);
+			echo "Failed decoding session.";
 			exit;
 		}
 		return $sess;
