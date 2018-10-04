@@ -1,5 +1,5 @@
 <?php
-header('Content-Type: text/html; charset=UTF-8');
+ini_set('default_charset', 'utf-8');
 require dirname(__FILE__) . "/init.php";
 
 function report($errno, $errstr, $errfile, $errline) {
@@ -48,10 +48,6 @@ $_CLIENT = [
 	"encoding" => isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json" ? "json" : "html",
         "http_method" => $_SERVER['REQUEST_METHOD']
 ];
-# Remove SERVER to force clean code
-if (! isset($no_strict)) {
-    unset($_SERVER);
-}
 if ($_CLIENT["test"]) {
 	// Set date to dummy for testing
 	$_CLIENT["today"] = "2015-09-01";
@@ -60,5 +56,9 @@ if ($_CLIENT["test"]) {
 # Taint (removing GET/POST/REQUEST against unsafe reads)
 core\Env::init();
 core\Taint::init();
+# Remove SERVER to force clean code
+if (! isset($no_strict)) {
+    unset($_SERVER);
+}
 # Prevent website usage if the user has been abusive.
 #core\Abuse::req($_CLIENT["ip"]);
