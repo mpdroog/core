@@ -16,7 +16,7 @@ class Env {
 
     // Visitor IP
     public static function ip() {
-        return self::$server[""HTTP_X_REAL_IP""] || self::$server["REMOTE_ADDR"];
+        return self::$server["HTTP_X_REAL_IP"] || self::$server["REMOTE_ADDR"];
     }
     // HTTP-protocol spoken to client.
     public static function protocol() {
