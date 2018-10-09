@@ -34,7 +34,7 @@ class Res {
 	/** HTTP Redirect */
 	public static function redirect($relative) {
 		$base = Helper::config("general")["baseurl"];
-		header(sprintf("Location: %s/%s", $base, $relative));
+		header(sprintf("Location: %s/%s", $base, $relative), true, 303);
 	}
 	/** HTTP redirect to external domain */
 	public static function redirect_external($url, $allowHTTP=false) {
@@ -45,6 +45,6 @@ class Res {
 		if (!$allowHTTP && $parts["scheme"] !== "https") {
 			user_error("Redirect without https: $url");
 		}
-		header(sprintf("Location: %s", $url));
+		header(sprintf("Location: %s", $url), true, 303);
 	}
 }
