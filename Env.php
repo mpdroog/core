@@ -24,14 +24,18 @@ class Env {
     }
     public static function encoding() {
         $enc = "plain";
-        if (isset($_SERVER["HTTP_ACCEPT"])) {
-            if ($_SERVER["HTTP_ACCEPT"] === "application/json") {
-                 $enc = "json";
-            }
-            if (strpos($_SERVER["HTTP_ACCEPT"], "text/html")) {
-                 $enc = "html";
+        $map = [
+            "application/json" => "json",
+            "text/html" => "html"
+        ];
+        $accept = self::$server["HTTP_ACCEPT"] ?? "";
+
+        foreach ($map as $k => $m) {
+            if (strpos($accept, $k) !== false) {
+                $enc = $m;
             }
         }
+
         return $enc;
     }
     // Get browser language and match it on $accept
