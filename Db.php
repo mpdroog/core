@@ -186,7 +186,7 @@ class Db {
 		$stmt = $this->query($query, $args);
 		$row = $stmt->fetch(\PDO::FETCH_ASSOC);
 		$stmt->closeCursor();
-		if (count($row) === 0) {
+		if (! is_array($row) || count($row) === 0) {
 			return false;
 		}
 		return $row;
