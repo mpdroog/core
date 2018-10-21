@@ -139,7 +139,15 @@ class Db {
 		$this->db->setAttribute(
 			\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
 		);
-		$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'");
+		$db = explode(":", $dsn)[0];
+		if ($db === "mysql") {
+			$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'");
+		} else if ($db === "sqlite") {
+			// sqlite
+			$this->db->query("PRAGMA strict=ON");
+		} else {
+			user_error("Unsupported DB: $db");
+		}
 	}
 
 	/**
