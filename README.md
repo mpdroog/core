@@ -1,5 +1,9 @@
+`core` is a loose webdev lib (all code is focussed on minimalism) to quickly write PHP-code without big frameworks or horribly complex libraries for basic stuff like SQL, input validation etc..
+
 Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
 
+Composer
+===================
 Add to your project
 ```json
 {
@@ -17,7 +21,9 @@ Add to your project
 }
 ```
 
-php.ini adjustments
+php.ini
+===================
+Compatible php.ini (if you want to bump security up big time)
 ```
 [PHP]
 ; Security

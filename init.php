@@ -4,7 +4,7 @@
  */
 
 # Error handling
-error_reporting(E_STRICT);
+error_reporting(-1);
 function report_ex($e) {
 	report($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 }
@@ -24,8 +24,4 @@ register_shutdown_function("report_fatal");
 # Encoding
 mb_internal_encoding("UTF-8");
 
-# Require path
-define("ROOT", realpath(dirname(__FILE__) . "/../../../") . "/");
-define("TPL_MAIL", ROOT . "tpl/mail/");
-define("TPL_PAGE", ROOT . "tpl/page/");
-require ROOT . 'vendor/autoload.php';
+define("ROOT", realpath(dirname(__FILE__) . "/../../../"));
