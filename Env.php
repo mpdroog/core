@@ -24,15 +24,46 @@ class Env {
     }
     public static function encoding() {
         $enc = "plain";
-        if (isset($_SERVER["HTTP_ACCEPT"])) {
-            if ($_SERVER["HTTP_ACCEPT"] === "application/json") {
-                 $enc = "json";
-            }
-            if (strpos($_SERVER["HTTP_ACCEPT"], "text/html")) {
-                 $enc = "html";
+        $map = [
+            "application/json" => "json",
+            "text/html" => "html"
+        ];
+        $accept = self::$server["HTTP_ACCEPT"] ?? "";
+
+        foreach ($map as $k => $m) {
+            if (strpos($accept, $k) !== false) {
+                $enc = $m;
             }
         }
+
         return $enc;
+    }
+    // Get browser language and match it on $accept
+    // If no match is found $accept[0] is chosen.
+    public static function getBrowserLang(array $accept = ["en"]) {
+        if (! isset(self::$server['HTTP_ACCEPT_LANGUAGE'])) {
+            return $accept[0];
+        }
+
+        $raw = self::$server['HTTP_ACCEPT_LANGUAGE'];
+        $langs = substr($raw, 0, strpos($raw, ";"));
+        foreach (explode(",", $langs) as $lang) {
+            $lang = strtolower($lang);
+            if (strpos($lang, "-") !== false) {
+                $lang = substr($lang, 0, strpos($lang, "-"));
+            }
+            if (in_array($lang, $accept)) {
+                return $lang;
+            }
+        }
+        return $accept[0];
+    }
+
+    // Get previous page
+    public static function prev() {
+        // https://domain.nl/...
+        $url = self::$server['HTTP_REFERER'];
+        return substr($url, strpos($url, "/", 8));
     }
 }
 
