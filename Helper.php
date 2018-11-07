@@ -12,9 +12,9 @@ class Helper {
 	public static function config($name) {
 		$files = [];
 		if (self::client()["test"]) {
-			$files[] = ROOT . "conf.d/$name-test.json";
+			$files[] = ROOT . "/conf.d/$name-test.json";
 		}
-		$files[] = ROOT . "conf.d/$name.json";
+		$files[] = ROOT . "/conf.d/$name.json";
 
 		foreach ($files as $file) {
 			if (file_exists($file)) {

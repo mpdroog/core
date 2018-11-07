@@ -16,7 +16,7 @@ trait TestUtils {
 	}
 
 	private function exec_worker($name, array $args = []) {
-		$param = array_merge([ROOT . "workers/index.php", $name, "-i=1"], $args);
+		$param = array_merge([ROOT . "/workers/index.php", $name, "-i=1"], $args);
 		return Cli::exec("php", $param);
 	}
 
