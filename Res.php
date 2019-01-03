@@ -22,6 +22,8 @@ class Res {
 			header("$v 401 Unauthorized");
 		} else if ($http === 403) {
 			header("$v 403 Banned");
+		} else if ($http === 503) {
+			header("$v 503 Too Many Requests");
 		} else {
 			user_error(sprintf('TODO: HTTP-statusCode(%d) not implemented (or not numeric)', $http));
 		}
