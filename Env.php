@@ -65,5 +65,10 @@ class Env {
         $url = self::$server['HTTP_REFERER'];
         return substr($url, strpos($url, "/", 8));
     }
+
+    // Get previous useragent
+    public static function userAgent() {
+        return self::$server['HTTP_USER_AGENT'] ?? '';
+    }
 }
 
