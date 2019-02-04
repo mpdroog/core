@@ -64,3 +64,16 @@ session.cookie_httponly = On
 ; https only
 session.cookie_secure = On
 ```
+
+sql.abuselimit
+```
+CREATE TABLE `abuselimit` (
+  `ratelimit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ratelimit_ip` varchar(80) NOT NULL,
+  `ratelimit_count` int(10) unsigned NOT NULL,
+  `ratelimit_time_updated` int(10) unsigned NOT NULL,
+  `ratelimit_time_added` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`ratelimit_id`),
+  UNIQUE KEY `unique_ip` (`ratelimit_ip`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+```
