@@ -1,5 +1,6 @@
 <?php
 namespace core;
+use core\Error;
 
 /**
  * Small SQL abstractions.
@@ -150,6 +151,16 @@ class Db {
 		}
 	}
 
+	/**
+	 * Close the DB-conn (supressing any errors like timeouts)
+	 */
+	public function close() {
+                // Supress broken pipe error on destroy
+                Error::mute();
+                $this->db = null;
+                Error::unmute();
+        }
+	
 	/**
 	 * Run query.
 	 */
