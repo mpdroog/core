@@ -70,5 +70,33 @@ class Env {
     public static function userAgent() {
         return self::$server['HTTP_USER_AGENT'] ?? '';
     }
-}
 
+    // Simple base64 auth
+    // $users = ["user" => "pass", "user2" => "pass2"...]
+    public static function blocking_auth($realm, array $users = []) {
+        if (count($users) === 0) {
+            user_error("DevErr: Env::blocking_auth called without users.");
+        }
+
+        $requser = self::$server["PHP_AUTH_USER"] ?? "";
+        $reqpass = self::$server["PHP_AUTH_PW"] ?? "";
+        if ($requser === "" || $reqpass === "") {
+            header(sprintf('WWW-Authenticate: Basic realm="%s"', $realm));
+            header('HTTP/1.0 401 Unauthorized');
+            echo "You must enter a valid login ID and password to access this resource\n";
+            exit;
+        }
+
+        $match = false;
+        foreach ($users as $user => $pass) {
+            if ($requser === $user && $reqpass === $pass) {
+                return;
+            }
+        }
+
+        header(sprintf('WWW-Authenticate: Basic realm="%s"', $realm));
+        header('HTTP/1.0 403 Unauthorized');
+        echo "You must enter a valid login ID and password to access this resource\n";
+        exit;
+    }
+}
