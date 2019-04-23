@@ -77,12 +77,13 @@ class Env {
         if (count($users) === 0) {
             user_error("DevErr: Env::blocking_auth called without users.");
         }
+        $v = self::protocol();
 
         $requser = self::$server["PHP_AUTH_USER"] ?? "";
         $reqpass = self::$server["PHP_AUTH_PW"] ?? "";
         if ($requser === "" || $reqpass === "") {
             header(sprintf('WWW-Authenticate: Basic realm="%s"', $realm));
-            header('HTTP/1.0 401 Unauthorized');
+            header("HTTP/$v 401 Unauthorized");
             echo "You must enter a valid login ID and password to access this resource\n";
             exit;
         }
@@ -95,7 +96,7 @@ class Env {
         }
 
         header(sprintf('WWW-Authenticate: Basic realm="%s"', $realm));
-        header('HTTP/1.0 403 Unauthorized');
+        header("HTTP/$v 403 Unauthorized");
         echo "You must enter a valid login ID and password to access this resource\n";
         exit;
     }
