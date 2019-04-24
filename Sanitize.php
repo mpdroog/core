@@ -2,6 +2,9 @@
 namespace core;
 
 trait SanitizeStrippers {
+    public static function number() {
+        return "/[^0-9]/";
+    }
     public static function numberchars() {
         return "/[^A-Za-z0-9]/";
     }
