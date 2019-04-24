@@ -18,14 +18,14 @@ class Worker {
 			}
                         $input = $job->getData();
 			msg(sprintf("Processing job (%d)", $job->getId()), [$input]);
-			$queue->bury($job);
 
                         if ($expect === "json") {
 			    $input = json_decode($input, true);
                         } else if ($expect === "string") {
                             // nothing to do
                         } else {
-                            user_error("Invalid expect=$expect");
+				$queue->bury($job);
+				user_error("Invalid expect=$expect");
                         }
 
 			$fn($input);
