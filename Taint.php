@@ -62,6 +62,9 @@ trait TaintValidators {
   private static function bytes($val) {
     return 1 === preg_match("/^[0-9]+\.*[0-9]* (B|KB|GB|TB)$/i", $val);
   }
+  private static function ascii($val) {
+    return 1 === preg_match("%^[ -~]+$%", $val);
+  }
 }
 
 trait ArrayValidators {
