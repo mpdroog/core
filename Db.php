@@ -165,6 +165,12 @@ class Db {
 	 * Run query.
 	 */
 	private function query($query, array $args) {
+		foreach ($args as $n => $arg) {
+			if (is_array($arg)) {
+				error_log(sprintf("SQL arg(%s=%s) invalid for query=%s", $n, print_r($arg, true), $query));
+			}
+		}
+
 		try {
 			$stmt = $this->db->prepare($query);
 			$ok = $stmt->execute($args);
