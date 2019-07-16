@@ -50,7 +50,6 @@ class DNS {
 	
 	// Ensure MX-record for email domain exists
 	public static function mx($domain) {
-		$domain = mb_substr($input->email, 1+mb_strpos($input->email, "@"));
 		if (! checkdnsrr($domain, 'MX')) {
     			return false;
 		}
