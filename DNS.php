@@ -54,6 +54,7 @@ class DNS {
 		if (! checkdnsrr($domain, 'MX')) {
     			return false;
 		}
+		return true;
 	}
 
 	public static function unique_ip($domain) {
