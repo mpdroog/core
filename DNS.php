@@ -11,7 +11,10 @@ class DNS {
 		return mb_substr($email, 1+$idx);
 	}
 
-	/** Convert domain to IP (recursive func) */
+	/**
+	 * Get MX-records for given domain - with A-record fallback (recursive func)
+	 * TODO: Delete?
+	 */
 	public static function ip($domain, $dns=[], $protect=0) {
 		if ($protect >= 5) {
 			user_error(
@@ -43,6 +46,14 @@ class DNS {
 			return $fallback;
 		}
 		return count($ips) === 0 ? false : $ips;
+	}
+	
+	// Ensure MX-record for email domain exists
+	public static function mx($domain) {
+		$domain = mb_substr($input->email, 1+mb_strpos($input->email, "@"));
+		if (! checkdnsrr($domain, 'MX')) {
+    			return false;
+		}
 	}
 
 	public static function unique_ip($domain) {
