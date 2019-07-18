@@ -31,4 +31,12 @@ class Strings {
                 }
                 return $text;
         }
+	public static function strip_filler($val, $filler='X') {
+		for ($i = strlen($val)-1; $i > 0; $i--) {
+			if ($val[$i] !== $filler) {
+				break;
+			}
+		}
+		return substr($val, 0, $i+1);
+	}
 }
