@@ -3,6 +3,7 @@ namespace core;
 use prj\Fn;
 use core\Db;
 use core\Res;
+use core\Env;
 
 /** Force 24hour wait after last attempt (Useful for user specific limits) */
 const STRATEGY_24H_WAIT = "STRATEGY_24H_WAIT";
@@ -34,7 +35,7 @@ class Abuse {
                 user_error("DevErr: Invalid Abuse strategy=$strategy");
             }
 
-            $whitelisted = self::whitelisted($ip);
+            $whitelisted = self::whitelisted(Env::ip());
             $count = $db->getCell("SELECT ratelimit_count FROM abuselimit WHERE ratelimit_ip = ? LIMIT 1", [$ip]);
             if (!$whitelisted && $count > $max) {
                 Res::error(503);
