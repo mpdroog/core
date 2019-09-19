@@ -47,4 +47,11 @@ class Sanitize {
     public static function key($txt) {
         return strtoupper(self::strip($txt, ["chars"]));
     }
+
+    /**
+     * Remove/Replace risky XSS-characters from the string
+     */
+    public static function xss($txt) {
+        return htmlspecialchars(strip_tags($txt));
+    }
 }
