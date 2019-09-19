@@ -65,6 +65,12 @@ trait TaintValidators {
   private static function ascii($val) {
     return 1 === preg_match("%^[ -~]+$%", $val);
   }
+  // Loosy name validator
+  // https://stackoverflow.com/questions/888838/regular-expression-for-validating-names-and-surnames
+  private static function name($txt) {
+    $pattern = "/^[\p{L} \.'\-]+$/u";
+    return 1 === preg_match($pattern, $txt);
+  }
 }
 
 trait ArrayValidators {
