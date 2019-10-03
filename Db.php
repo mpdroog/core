@@ -196,6 +196,27 @@ class Db {
 
 	/**
 	 * Run query and get ALL data in associative array.
+	 * @param string $key Use fieldname in resultset to create map
+	 * @param bool $unique Force key-entries to be unique (else error)
+	 * @return array map[key]=value
+	 */
+	public function getAllMap($key, $query, array $args = [], $unique=true) {
+		$output = [];
+
+		$stmt = $this->query($query, $args);
+		while ($row = $stmt->fetch(\PDO::FETCH_NUM, \PDO::FETCH_ORI_NEXT)) {
+			if ($unique && isset($output[ $row[$key] ])) {
+				user_error("getAllMap(duplicate key=$key) for sql=$sql");
+			}
+			$output[ $row[$key] ] = $row;
+		}
+		$stmt->closeCursor();
+
+		return $output;
+	}
+
+	/**
+	 * Run query and get ALL data in associative array.
 	 * @return array|bool FALSE on failure
 	 */
 	public function getAll($query, array $args = []) {
