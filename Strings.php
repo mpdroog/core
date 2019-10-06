@@ -39,4 +39,11 @@ class Strings {
 		}
 		return substr($val, 0, $i+1);
 	}
+        public static function fill($text, $len, $filler='0') {
+                if (strlen($text) === $len) return $text;
+                for ($i = strlen($text); $i < $len; $i++) {
+                        $text = $filler . $text;
+                }
+                return $text;
+        }
 }
