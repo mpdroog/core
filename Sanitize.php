@@ -12,7 +12,7 @@ trait SanitizeStrippers {
         return "/[^A-Za-z0-9_\-]/";
     }
     public static function text() {
-        return "/[^[:alnum:][:space:]_\-\(\)+]/u";
+        return "/[^[:alnum:][:space:]:\.\\\\\/_\-\(\)+]/u";
     }
     public static function chars() {
         return "/[^A-Za-z]/";
