@@ -100,4 +100,8 @@ class Env {
         echo "You must enter a valid login ID and password to access this resource\n";
         exit;
     }
+    
+    public static function method() {
+        return self::$server["REQUEST_METHOD"];
+    }
 }
