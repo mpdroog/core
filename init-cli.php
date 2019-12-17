@@ -69,6 +69,7 @@ unset($_GET);
 unset($_POST);
 unset($_SERVER);
 define("VERBOSE", $verbose);
+define("WRITE", isset($_CLI["flags"]["w"]));
 
 function msg($msg, array $args = []) {
 	global $verbose;
