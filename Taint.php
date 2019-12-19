@@ -239,6 +239,16 @@ class Taint {
     $errors = [];
     $rules = $out->rules();
 
+    // Replace any -minus fields to _
+    $d2 = [];
+    foreach ($data as $k => $v) {
+      if (strpos($k, "-") !== false) {
+        $k = str_replace("-", "_", $k);
+      }
+      $d2[$k] = $v;
+    }
+    $data = $d2;
+    
     $count = 0;
     foreach ($fields as $field) {
       // Check if field exists
