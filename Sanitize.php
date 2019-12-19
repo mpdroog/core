@@ -17,6 +17,9 @@ trait SanitizeStrippers {
     public static function chars() {
         return "/[^A-Za-z]/";
     }
+    public static function xss($txt) {
+        return htmlspecialchars(strip_tags($txt));
+    }
 }
 
 class Sanitize {
