@@ -100,6 +100,12 @@ class Env {
         echo "You must enter a valid login ID and password to access this resource\n";
         exit;
     }
+
+    // Read HFast-path
+    public static function hfastPath() {
+        $path = str_replace('/action/', '', self::$server["DOCUMENT_URI"]);
+        return str_replace("..", "", $path);
+    }
     
     public static function method() {
         return self::$server["REQUEST_METHOD"];
