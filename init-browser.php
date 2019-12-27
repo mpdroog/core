@@ -11,15 +11,6 @@ function report($errno, $errstr, $errfile, $errline) {
   exit("Error written to error log.\n");
 }
 
-# Security
-$test = getenv("TESTING") !== false;
-if ($test) {
-	// Unittest fake the IP.
-	$_SERVER["HTTP_X_REAL_IP"] = "127.0.0.1";
-} else if (!isset($_SERVER["HTTP_X_REAL_IP"])) {
-	user_error("Nginx misconfigured, missing HTTP_X_REAL_IP");
-}
-
 # Paranoia (try to expose as less as possible)
 $uniq = "";
 foreach (["HTTP_ACCEPT_LANGUAGE", "HTTP_USER_AGENT", "HTTP_ACCEPT"] as $key) {
@@ -37,20 +28,6 @@ $refok = false;
 		$domain = substr($domain, 0, strpos($domain, "/"));
 		$refok = $domain === $_SERVER["HTTP_HOST"];
 	}
-}
-
-$_CLIENT = [
-	"test" => $test,
-	"today" => date("Y-m-d"),
-	"ip" => $_SERVER["HTTP_X_REAL_IP"],
-	"uniq" => sha1($uniq),
-	"referer_ok" => $refok,
-	"encoding" => isset($_SERVER["HTTP_ACCEPT"]) && $_SERVER["HTTP_ACCEPT"] === "application/json" ? "json" : "html",
-        "http_method" => $_SERVER['REQUEST_METHOD']
-];
-if ($_CLIENT["test"]) {
-	// Set date to dummy for testing
-	$_CLIENT["today"] = "2015-09-01";
 }
 
 # Taint (removing GET/POST/REQUEST against unsafe reads)
