@@ -164,6 +164,9 @@ class Taint {
       if ($rule === "fragment") {
         continue;
       }
+      if ($rule === "opt") {
+        continue;
+      }
       $idx = mb_strpos($rule, "=");
       if ($idx !== false) {
         // Key=value
