@@ -26,16 +26,7 @@ $refok = false;
 	if (isset($_SERVER["HTTP_REFERER"])) {
 		$domain = str_replace("https://", "", str_replace("http://", "", $_SERVER["HTTP_REFERER"]));
 		$domain = substr($domain, 0, strpos($domain, "/"));
-		$refok = $domain === $_SERVER["HTTP_HOST"];
+		$refok = $domain === $_SERVER["SERVER_NAME"];
 	}
 }
 
-# Taint (removing GET/POST/REQUEST against unsafe reads)
-core\Env::init();
-core\Taint::init();
-# Remove SERVER to force clean code
-if (! isset($no_strict)) {
-    unset($_SERVER);
-}
-# Prevent website usage if the user has been abusive.
-#core\Abuse::req($_CLIENT["ip"]);
