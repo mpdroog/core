@@ -32,7 +32,7 @@ class HTTP {
       $json = json_decode($res, true);
       if (! is_array($json)) {
           print_r($res);
-          user_error("http_json::failed decoding");
+          user_error("http_json::failed decoding raw=%s", $res);
       }
       return $json;
   }
