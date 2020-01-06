@@ -261,6 +261,24 @@ class Db {
 	}
 
 	/**
+	* Run query and get results as keys for quick lookups (hashmap kind-of)
+	* @return array map[key]=1
+	*/
+	public function getColMap($key, $query, array $args = [], $unique=true) {
+		$output = [];
+
+		$stmt = $this->query($query, $args);
+		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_NEXT)) {
+			if ($unique && isset($output[ $row[$key] ])) {
+				user_error("getAllMap(duplicate key=$key) for sql=$sql");
+			}
+			$output[ $row[$key] ] = 1;
+		}
+		$stmt->closeCursor();
+		return $output;
+	}
+
+	/**
 	 * Begin new transaction.
 	 * @return DbTxn
 	 */
@@ -305,3 +323,4 @@ class DbTxn {
 		$this->done = true;
 	}
 }
+
