@@ -206,7 +206,7 @@ class Db {
 		$stmt = $this->query($query, $args);
 		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_NEXT)) {
 			if ($unique && isset($output[ $row[$key] ])) {
-				user_error("getAllMap(duplicate key=$key) for sql=$sql");
+				user_error("getAllMap(duplicate key=$key) for sql=$query");
 			}
 			$output[ $row[$key] ] = $row;
 		}
@@ -270,7 +270,7 @@ class Db {
 		$stmt = $this->query($query, $args);
 		while ($row = $stmt->fetch(\PDO::FETCH_ASSOC, \PDO::FETCH_ORI_NEXT)) {
 			if ($unique && isset($output[ $row[$key] ])) {
-				user_error("getAllMap(duplicate key=$key) for sql=$sql");
+				user_error("getAllMap(duplicate key=$key) for sql=$query");
 			}
 			$output[ $row[$key] ] = 1;
 		}
