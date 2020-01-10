@@ -3,7 +3,6 @@ namespace core;
 use core\MdMail;
 use core\DirtyMarkdown;
 use core\Helper;
-use prj\Fn;
 
 class Render {
 	/** Render(Markdown) $file with $args */

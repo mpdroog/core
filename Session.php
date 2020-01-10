@@ -2,7 +2,7 @@
 namespace core;
 use core\AES;
 use core\Helper;
-use prj\Fn;
+use prj\Global;
 
 /**
  * Session helpers.
@@ -10,7 +10,7 @@ use prj\Fn;
 class Session {
 	/* Check valid UUID, return user.id */
 	private static function check_uuid($uuid, $counter) {
-		return Fn::db()->getCell(
+		return Global::db()->getCell(
 			"SELECT
 				id
 			FROM

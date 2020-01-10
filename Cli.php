@@ -1,6 +1,6 @@
 <?php
 namespace core;
-use prj\Fn;
+use prj\Global;
 
 /** Hack to clear lock on shutdown. */
 class SyncShutdown {
@@ -51,7 +51,7 @@ class Cli {
 		sleep($rand);
 
 		// Attempt to acquire lock.
-		$db = Fn::db();
+		$db = Global::db();
 		// TODO: Suppress lock error in log here?
 		$res = $db->exec(
 			"UPDATE
