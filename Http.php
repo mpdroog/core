@@ -1,5 +1,6 @@
 <?php
 namespace core;
+use core\Strings;
 
 class HTTP {
   public static function json($url) {
@@ -23,18 +24,22 @@ class HTTP {
           user_error(curl_error($ch));
       }
       $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+      $ct = curl_getinfo($ch,  CURLINFO_CONTENT_TYPE);
       curl_close($ch);
 
       if ($res === false) {
           user_error('curl_exec fail');
       }
 
-      $json = json_decode($res, true);
-      if (! is_array($json)) {
-          print_r($res);
-          user_error("http_json::failed decoding raw=%s", $res);
+      $out = ["http" => $code, "ct" => $ct, "body" => $res];
+      if (Strings::has_prefix($ct, "application/json")) {
+          $out["body"] = json_decode($res, true);
+          if (! is_array($out["body"])) {
+              print_r($res);
+              user_error("http_json::failed decoding raw=%s", $res);
+          }
       }
-      return $json;
+      return $out;
   }
 }
 
