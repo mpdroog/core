@@ -2,6 +2,15 @@
 namespace core;
 
 class Strings {
+        /** prefix returns the text before sep from s */
+        public static function prefix($s, $sep) {
+                return mb_substr($s, 0, mb_strpos($s, $sep));
+        }
+        /** prefix returns the text after sep from s */
+        public static function suffix($s, $sep) {
+                return mb_substr($s, strlen($sep) + mb_strpos($s, $sep));
+        }
+
 	/** HasPrefix tests whether the string s begins with prefix. */
 	public static function has_prefix($s, $prefix) {
 		return mb_substr($s, 0, mb_strlen($prefix)) === $prefix;
