@@ -5,6 +5,26 @@ namespace core;
  * Calculate price.
  */
 class EUTax {
+	/**
+	* Check if $country is in SEPA.
+	* @param string $country ISO2 country notation
+	* @return bool inSEPA
+	*/
+	public static function in_sepa($country) {
+		$sepaCountries = [
+			"FI", "AT", "PT", "BE", "BG", "ES",
+			"HR", "CY", "CZ", "DK", "EE", "FI",
+			"FR", "GF", "DE", "GI", "GR", "GP",
+			"GG", "HU", "IS", "IE", "IM", "IT",
+			"JE", "LV", "LI", "LT", "LU", "PT",
+			"MT", "MQ", "YT", "MC", "NL", "NO",
+			"PL", "PT", "RE", "RO", "BL", "MF",
+			"PM", "SM", "SK", "SI", "SE", "CH",
+			"GB"
+		);
+		return in_array($country, $sepaCountries);
+	}
+
 	public static function rates() {
 		return [
 			"BE" => "21",
