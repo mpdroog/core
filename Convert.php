@@ -20,5 +20,6 @@ class Convert {
       }
       $lines[] = $out;
     }
+    return $lines;
   }
 }
