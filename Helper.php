@@ -38,6 +38,11 @@ class Helper {
 		return $token;
 	}
 
+	// Generate uniqueid to generate up to million of unique ids (userstr could be: clientip, userid, nodename)
+	public static function unique($userstr) {
+		return base_convert(md5(uniqid("", TRUE) . time() . "1" . $userstr), 16, 36);
+	}
+
 	/** Check if $ip is in $cidrs (ranges) */
 	public static function in_range($ip, array $cidrs) {
 		foreach ($cidrs as $cidr) {
