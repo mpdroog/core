@@ -33,4 +33,10 @@ class Dates {
 		}
 		return array_values($out);
 	}
+
+        // Get days between $from-$to (unixtimestamps)
+        public static function days($from, $to) {
+                $datediff = $to - $from;
+                return round($datediff / (60 * 60 * 24));
+        }
 }
