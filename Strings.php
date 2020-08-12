@@ -20,6 +20,12 @@ class Strings {
 	public static function has_suffix($s, $suffix) {
 		return mb_substr($s, -1 * mb_strlen($suffix)) === $suffix;
 	}
+
+        /** Contains tests whether the string s contains search. */
+        public static function contains($s, $search) {
+                return mb_strpos($s, $search) !== false;
+        }
+	
 	/** Slugify converts a string into an URL-friendly text */
         public static function slugify($text) {
                 // replace non letter or digits by -
