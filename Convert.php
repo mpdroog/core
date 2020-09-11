@@ -6,7 +6,7 @@ namespace core;
  */
 class Convert {
   // Parse CSV into associated array
-  public static function csv($str) {
+  public static function csv($str, $loose = false) {
     $fp = fopen("php://temp", 'r+');
     if (! is_resource($fp)) {
       user_error("fopen(temp) failed");
@@ -22,18 +22,26 @@ class Convert {
     if ($kv === null || $kv === false) {
       user_error("fgetcsv(temp) failed");
     }
-    foreach ($kv as $k => &$v) {
+    /*foreach ($kv as $k => &$v) {
       $v = trim($v);
     }
+    unset($v);*/
 
     $lines = [];
     while ( ($data = fgetcsv($fp) ) !== FALSE ) {
       $out = [];
-      foreach ($data as $idx => $col) {
-        if (isset($out[ $kv[$idx] ])) {
-          user_error(sprintf("key=%s already set", $kv[$idx]));
+      foreach ($kv as $k => $v) {
+        if (isset($out[ $v ])) {
+          user_error(sprintf("key=%s already set", $v));
         }
-        $out[ $kv[$idx] ] = trim($col);
+        if ($loose && !isset($data[$k])) {
+          $out[ $v ] = "";
+          continue;
+        }
+        if (! isset($data[$k])) {
+          user_error(sprintf("key=%s missing", $k));
+        }
+        $out[ $v ] = trim($data[$k]);
       }
       $lines[] = $out;
     }
