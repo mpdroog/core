@@ -22,10 +22,10 @@ class Convert {
     if ($kv === null || $kv === false) {
       user_error("fgetcsv(temp) failed");
     }
-    /*foreach ($kv as $k => &$v) {
-      $v = trim($v);
+    $kv = fgetcsv($fp);
+    if (substr($kv[0], 0, strlen("sep=")) === "sep=") {
+      $kv = fgetcsv($fp); // ignore sep= line
     }
-    unset($v);*/
 
     $lines = [];
     while ( ($data = fgetcsv($fp) ) !== FALSE ) {
