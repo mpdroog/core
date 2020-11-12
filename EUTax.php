@@ -21,7 +21,7 @@ class EUTax {
 			"PL", "PT", "RE", "RO", "BL", "MF",
 			"PM", "SM", "SK", "SI", "SE", "CH",
 			"GB"
-		);
+		];
 		return in_array($country, $sepaCountries);
 	}
 
