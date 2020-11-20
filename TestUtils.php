@@ -1,31 +1,37 @@
 <?php
 namespace core;
+
 use core\Cli;
 use core\Curl;
 use core\Helper;
 
-trait TestUtils {
+trait TestUtils
+{
 	// Get cURL instance
-	private function curl() {
+	private function curl()
+	{
 		$c = new Curl();
-		$c->setJsonDecoder(function($val) {
+		$c->setJsonDecoder(function ($val) {
 			$res = json_decode($val, true);
 			return $res;
 		});
 		return $c;
 	}
 
-	private function exec_worker($name, array $args = []) {
+	private function exec_worker($name, array $args = [])
+	{
 		$param = array_merge([ROOT . "/workers/index.php", $name, "-i=1"], $args);
 		return Cli::exec("php", $param);
 	}
 
-	private function exec_cli($name, array $args = []) {
+	private function exec_cli($name, array $args = [])
+	{
 		$args = array_merge([$name], $args);
 		return Cli::exec("./run.sh", $args);
 	}
 
-	private static function pending($queue) {
+	private static function pending($queue)
+	{
 		try {
 			$queue = Helper::prefix($queue);
 			return self::$queue->statsTube($queue)["current-jobs-ready"];
@@ -34,7 +40,8 @@ trait TestUtils {
 		}
 	}
 
-	private static function buried($queue) {
+	private static function buried($queue)
+	{
 		try {
 			$queue = Helper::prefix($queue);
 			return self::$queue->statsTube($queue)["current-jobs-buried"];
@@ -43,7 +50,8 @@ trait TestUtils {
 		}
 	}
 
-	private static function verbose($task, $text, $iswrite = false) {
+	private static function verbose($task, $text, $iswrite = false)
+	{
 		$a = [
 			"test" => true,
 			"task" => $task,

@@ -1,9 +1,10 @@
 <?php
 require dirname(__FILE__) . "/init.php";
-function report($errno, $errstr, $errfile, $errline) {
-  $msg = "($errfile:$errline) $errno: $errstr";
-  error_log($msg);
-  exit(1);
+function report($errno, $errstr, $errfile, $errline)
+{
+	$msg = "($errfile:$errline) $errno: $errstr";
+	error_log($msg);
+	exit(1);
 }
 
 // Init $_CLI with CLI task + args
@@ -18,7 +19,7 @@ $_CLI = null;
 	}
 	if (count($args) < $skip+1) {
 		$args[$skip] = "help";
-	} else if (substr($args[$skip], 0, 1) === "-") {
+	} elseif (substr($args[$skip], 0, 1) === "-") {
 		$args[] = $args[$skip];
 		$args[$skip] = "help";
 	}
@@ -47,10 +48,10 @@ $_CLI = null;
 			if (substr($kvp, 0, 1) === "-") {
 				if ($kvp === "-v") {
 					$verbose = true;
-				} else if ($kvp === "--help") {
+				} elseif ($kvp === "--help") {
 					$_CLI["task"] = "help";
 				} else {
-					$_CLI["flags"][substr($kvp,1)] = true;
+					$_CLI["flags"][substr($kvp, 1)] = true;
 				}
 			} else {
 				$_CLI["args"][$kvp] = true;
@@ -71,7 +72,8 @@ unset($_SERVER);
 define("VERBOSE", $verbose);
 define("WRITE", isset($_CLI["flags"]["w"]));
 
-function msg($msg, array $args = []) {
+function msg($msg, array $args = [])
+{
 	global $verbose;
 	if (! $verbose) {
 		return;

@@ -1,15 +1,18 @@
 <?php
 namespace core;
+
 use Lifo\IP\CIDR;
 
 /**
  * Global Helpers.
  */
-class Helper {
+class Helper
+{
 	// Read conf.d/$name(-test).json
 	// We use the -test version for keeping our
 	//  tests static and simple.
-	public static function config($name) {
+	public static function config($name)
+	{
 		$files = [];
 		if (self::client()["test"]) {
 			$files[] = ROOT . "/conf.d/$name-test.json";
@@ -25,7 +28,8 @@ class Helper {
 	}
 
 	// Random value having a length of $len.
-	public static function rand($len) {
+	public static function rand($len)
+	{
 		$token = "";
 		$codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		$codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
@@ -39,12 +43,14 @@ class Helper {
 	}
 
 	// Generate uniqueid to generate up to million of unique ids (userstr could be: clientip, userid, nodename)
-	public static function unique($userstr) {
-		return base_convert(md5(uniqid("", TRUE) . time() . "1" . $userstr), 16, 36);
+	public static function unique($userstr)
+	{
+		return base_convert(md5(uniqid("", true) . time() . "1" . $userstr), 16, 36);
 	}
 
 	/** Check if $ip is in $cidrs (ranges) */
-	public static function in_range($ip, array $cidrs) {
+	public static function in_range($ip, array $cidrs)
+	{
 		foreach ($cidrs as $cidr) {
 			if (CIDR::INTERSECT_YES === CIDR::cidr_intersect($ip, $cidr)) {
 				return true;
@@ -53,17 +59,20 @@ class Helper {
 		return false;
 	}
 
-	public static function client() {
+	public static function client()
+	{
 		global $_CLIENT;
 		return $_CLIENT;
 	}
 
-	public static function client_new(array $replacement) {
+	public static function client_new(array $replacement)
+	{
 		global $_CLIENT;
 		$_CLIENT = $replacement;
 	}
 
-	public static function prefix($txt) {
+	public static function prefix($txt)
+	{
 		return sprintf(
 			"%s-%s",
 			self::config("general")["syskey"],

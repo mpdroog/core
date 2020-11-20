@@ -1,9 +1,11 @@
 <?php
 namespace core;
 
-class DNS {
+class DNS
+{
 	/** Strip domain from email */
-	public static function mail_domain($email) {
+	public static function mail_domain($email)
+	{
 		$idx = mb_strpos($email, "@");
 		if ($idx === false) {
 			user_error("DNS::mail_domain Not email=$email");
@@ -15,7 +17,8 @@ class DNS {
 	 * Get MX-records for given domain - with A-record fallback (recursive func)
 	 * TODO: Delete?
 	 */
-	public static function ip($domain, $dns=[], $protect=0) {
+	public static function ip($domain, $dns=[], $protect=0)
+	{
 		if ($protect >= 5) {
 			user_error(
 				"Recursion bug, preventing infinite loop for domain="
@@ -49,14 +52,16 @@ class DNS {
 	}
 	
 	// Ensure MX-record for email domain exists
-	public static function mx($domain) {
+	public static function mx($domain)
+	{
 		if (! checkdnsrr($domain, 'MX')) {
-    			return false;
+			return false;
 		}
 		return true;
 	}
 
-	public static function unique_ip($domain) {
+	public static function unique_ip($domain)
+	{
 		return array_unique(self::ip($domain));
 	}
 }

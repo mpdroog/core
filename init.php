@@ -5,15 +5,19 @@
 
 # Error handling
 error_reporting(-1);
-function report_ex($e) {
+function report_ex($e)
+{
 	report($e->getCode(), $e->getMessage(), $e->getFile(), $e->getLine());
 }
-function report_fatal() {
+function report_fatal()
+{
 	$error = error_get_last();
-	if( $error !== NULL) {
+	if ($error !== null) {
 		report(
-			E_CORE_ERROR, $error["message"],
-			$error["file"], $error["line"]
+			E_CORE_ERROR,
+			$error["message"],
+			$error["file"],
+			$error["line"]
 		);
 	}
 }

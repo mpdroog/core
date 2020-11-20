@@ -1,5 +1,6 @@
 <?php
 namespace core;
+
 use prj\HtmlMail;
 
 /**
@@ -9,11 +10,13 @@ use prj\HtmlMail;
  * To have one template (Markdown plain/text) for an email
  * and easily extend it with HTML+inline CSS for 'rich emails'
  */
-class DirtyMarkdown {
+class DirtyMarkdown
+{
 	use HtmlMail;
 
 	/** Check if line only exists of '=' chars */
-	private static function is_heading($line) {
+	private static function is_heading($line)
+	{
 		if (mb_strlen($line) === 0) {
 			return false;
 		}
@@ -26,7 +29,8 @@ class DirtyMarkdown {
 	}
 
 	/** Check for [..](..) pattern */
-	private static function is_link($line) {
+	private static function is_link($line)
+	{
 		$txtBegin = mb_strpos($line, "[");
 		$txtEnd = mb_strpos($line, "]");
 		$urlBegin = mb_strpos($line, "(");
@@ -44,12 +48,14 @@ class DirtyMarkdown {
 	}
 
 	/* Check for 'empty line' */
-	private static function is_newline($line) {
+	private static function is_newline($line)
+	{
 		return mb_strlen(trim($line)) === 0;
 	}
 
 	/* Convert 'simple' Markdown-syntaxis to HTML email */
-	public static function parse($input) {
+	public static function parse($input)
+	{
 		$lines = [];
 		$lines[] = self::section_begin();
 
@@ -74,7 +80,7 @@ class DirtyMarkdown {
 				// New block?
 				if ($prev_newline) {
 					// Yes, begin new section
-					$lines[] = self::section_end();					
+					$lines[] = self::section_end();
 					$lines[] = self::section_begin();
 					continue;
 				} else {

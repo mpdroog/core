@@ -4,13 +4,15 @@ namespace core;
 /**
  * Calculate price.
  */
-class EUTax {
+class EUTax
+{
 	/**
 	* Check if $country is in SEPA.
 	* @param string $country ISO2 country notation
 	* @return bool inSEPA
 	*/
-	public static function in_sepa($country) {
+	public static function in_sepa($country)
+	{
 		$sepaCountries = [
 			"FI", "AT", "PT", "BE", "BG", "ES",
 			"HR", "CY", "CZ", "DK", "EE", "FI",
@@ -25,7 +27,8 @@ class EUTax {
 		return in_array($country, $sepaCountries);
 	}
 
-	public static function rates() {
+	public static function rates()
+	{
 		return [
 			"BE" => "21",
 			"NL" => "21",
@@ -59,7 +62,8 @@ class EUTax {
 	}
 
 	/** Strip tax from $price */
-	public static function calc($country, $price) {
+	public static function calc($country, $price)
+	{
 		$rates = self::rates();
 		$rate = null;
 		if (isset($rates[$country])) {

@@ -1,25 +1,28 @@
 <?php
 namespace core;
 
-class Dates {
+class Dates
+{
 	// Convert $date into $step intervals.
 	// $step is in 5min intervals
 	//
 	// @param int $date unixtimestamp
 	// @param int $step step * 5min
-	public static function consolidate($date, $step) {
+	public static function consolidate($date, $step)
+	{
 		$step = 60 * 5 * $step; // 5min intervals
 		$addl = $date % $step;
 		return $date - $addl;
 	}
 
 	// Get $entries related from $today in upcoming years
-	public static function years($today, $entries = 6) {
+	public static function years($today, $entries = 6)
+	{
 		$year = strtotime($today);
 		if ($year === false) {
 			return false;
 		}
-		$out = array(date("Y", $year));
+		$out = [date("Y", $year)];
 
 		for ($i = 1; $i < $entries; $i++) {
 			$year = strtotime("+1 year", $year);
@@ -34,9 +37,10 @@ class Dates {
 		return array_values($out);
 	}
 
-        // Get days between $from-$to (unixtimestamps)
-        public static function days($from, $to) {
-                $datediff = $to - $from;
-                return round($datediff / (60 * 60 * 24));
-        }
+	// Get days between $from-$to (unixtimestamps)
+	public static function days($from, $to)
+	{
+		$datediff = $to - $from;
+		return round($datediff / (60 * 60 * 24));
+	}
 }

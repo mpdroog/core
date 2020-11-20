@@ -2,13 +2,14 @@
 ini_set('default_charset', 'utf-8');
 require dirname(__FILE__) . "/init.php";
 
-function report($errno, $errstr, $errfile, $errline) {
-  header('HTTP/1.1 500 Internal Server Error');
-  // TODO: Report error to devsys
+function report($errno, $errstr, $errfile, $errline)
+{
+	header('HTTP/1.1 500 Internal Server Error');
+	// TODO: Report error to devsys
 
-  $msg = "($errfile:$errline) $errno: $errstr";
-  error_log($msg);
-  exit("Error written to error log.\n");
+	$msg = "($errfile:$errline) $errno: $errstr";
+	error_log($msg);
+	exit("Error written to error log.\n");
 }
 
 # Paranoia (try to expose as less as possible)
@@ -29,4 +30,3 @@ $refok = false;
 		$refok = $domain === $_SERVER["SERVER_NAME"];
 	}
 }
-

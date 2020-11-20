@@ -1,12 +1,15 @@
 <?php
 namespace core;
+
 use core\MdMail;
 use core\DirtyMarkdown;
 use core\Helper;
 
-class Render {
+class Render
+{
 	/** Render(Markdown) $file with $args */
-	public static function mail($file, array $args = []) {
+	public static function mail($file, array $args = [])
+	{
 		$lang = "en";
 		if (isset($_COOKIE["lang"])) {
 			$lang = strtolower($_COOKIE["lang"]);
@@ -41,7 +44,8 @@ class Render {
 	// Black magic for dead-simple template rendering
 	// arg0 = file
 	// arg1 = args as array
-	public static function php() {
+	public static function php()
+	{
 		ob_start();
 		{
 			extract(func_get_arg(1));

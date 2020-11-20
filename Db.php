@@ -1,16 +1,19 @@
 <?php
 namespace core;
+
 use core\Error;
 
 /**
  * Small SQL abstractions.
  */
-trait DbOrm {
+trait DbOrm
+{
 	/**
 	 * Insert entry into database.
 	 * WARN: Please be careful to supply a $table from a safe source!
 	 */
-	public function insert($table, array $keyValue, $return_idx=true) {
+	public function insert($table, array $keyValue, $return_idx=true)
+	{
 		$values = [];
 		$fields = [];
 		foreach (array_keys($keyValue) as $key) {
@@ -42,7 +45,8 @@ trait DbOrm {
 	/**
 	 * Insert on new else update
 	 */
-	public function insertUpdate($table, array $keyValue, array $onUpdate) {
+	public function insertUpdate($table, array $keyValue, array $onUpdate)
+	{
 		$values = [];
 		$fields = [];
 		$update = [];
@@ -67,7 +71,8 @@ trait DbOrm {
 		}
 	}
 
-	public function update($table, array $values, array $where, $row_count = 1) {
+	public function update($table, array $values, array $where, $row_count = 1)
+	{
 		$updates = [];
 		$wheres = [];
 		foreach (array_keys($values) as $key) {
@@ -89,24 +94,30 @@ trait DbOrm {
 		);
 
 		$args = array_merge(
-			array_values($values), array_values($where)
+			array_values($values),
+			array_values($where)
 		);
 		$stmt = $this->query(
-			$query, $args
+			$query,
+			$args
 		);
 
 		if ($row_count !== null) {
 			if ($stmt->rowCount() != $row_count) {
 				user_error(sprintf(
 					"db.update.affected expect=%s,affect=%s for query=%s args=%s",
-					$row_count, $stmt->rowCount(), $query, implode(", ", $args)
+					$row_count,
+					$stmt->rowCount(),
+					$query,
+					implode(", ", $args)
 				));
 			}
 		}
 		return $stmt->rowCount();
 	}
 
-	public function delete($table, array $where) {
+	public function delete($table, array $where)
+	{
 		$depend = [];
 		foreach (array_keys($where) as $key) {
 			$depend[] = "`$key` = ?";
@@ -127,7 +138,8 @@ trait DbOrm {
  * Why instantiate?
  * Because multiple DBs is a realistic use-case.
  */
-class Db {
+class Db
+{
 	use DbOrm;
 	/** \PDO */
 	private $db;
@@ -135,15 +147,17 @@ class Db {
 	/**
 	 * Create a new persistant conn to the DB.
 	 */
-	public function __construct($dsn, $user, $pass) {
-		$this->db = new \PDO($dsn, $user, $pass, array());
+	public function __construct($dsn, $user, $pass)
+	{
+		$this->db = new \PDO($dsn, $user, $pass, []);
 		$this->db->setAttribute(
-			\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION
+			\PDO::ATTR_ERRMODE,
+			\PDO::ERRMODE_EXCEPTION
 		);
 		$db = explode(":", $dsn)[0];
 		if ($db === "mysql") {
 			$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'");
-		} else if ($db === "sqlite") {
+		} elseif ($db === "sqlite") {
 			// sqlite
 			$this->db->query("PRAGMA strict=ON");
 		} else {
@@ -154,17 +168,19 @@ class Db {
 	/**
 	 * Close the DB-conn (supressing any errors like timeouts)
 	 */
-	public function close() {
-                // Supress broken pipe error on destroy
-                Error::mute();
-                $this->db = null;
-                Error::unmute();
-        }
+	public function close()
+	{
+		// Supress broken pipe error on destroy
+		Error::mute();
+		$this->db = null;
+		Error::unmute();
+	}
 	
 	/**
 	 * Run query.
 	 */
-	private function query($query, array $args) {
+	private function query($query, array $args)
+	{
 		foreach ($args as $n => $arg) {
 			if (is_array($arg)) {
 				error_log(sprintf("SQL arg(%s=%s) invalid for query=%s", $n, print_r($arg, true), $query));
@@ -180,8 +196,11 @@ class Db {
 		} catch (\PDOException $e) {
 			$msg = str_replace("\n", "", $e->getMessage());
 			$args = str_replace("\n", "", print_r($args, true));
-			user_error(sprintf("SQL reason=[%s] query=[%s] and args=[%s]",
-				$msg, $query, $args
+			user_error(sprintf(
+				"SQL reason=[%s] query=[%s] and args=[%s]",
+				$msg,
+				$query,
+				$args
 			));
 		}
 		return $stmt;
@@ -190,7 +209,8 @@ class Db {
 	/**
 	 * Run query.
 	 */
-	public function exec($query, array $args = []) {
+	public function exec($query, array $args = [])
+	{
 		return $this->query($query, $args);
 	}
 
@@ -200,7 +220,8 @@ class Db {
 	 * @param bool $unique Force key-entries to be unique (else error)
 	 * @return array map[key]=value
 	 */
-	public function getAllMap($key, $query, array $args = [], $unique=true) {
+	public function getAllMap($key, $query, array $args = [], $unique=true)
+	{
 		$output = [];
 
 		$stmt = $this->query($query, $args);
@@ -219,7 +240,8 @@ class Db {
 	 * Run query and get ALL data in associative array.
 	 * @return array|bool FALSE on failure
 	 */
-	public function getAll($query, array $args = []) {
+	public function getAll($query, array $args = [])
+	{
 		$stmt = $this->query($query, $args);
 		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 	}
@@ -228,7 +250,8 @@ class Db {
 	 * Run query and get first row in associative array.
 	 * @return array|bool FALSE on failure
 	 */
-	public function getRow($query, array $args = []) {
+	public function getRow($query, array $args = [])
+	{
 		$stmt = $this->query($query, $args);
 		$row = $stmt->fetch(\PDO::FETCH_ASSOC);
 		$stmt->closeCursor();
@@ -242,16 +265,18 @@ class Db {
 	 * Run query and get single value.
 	 * @return mixed|bool FALSE on failure
 	 */
-	public function getCell($query, array $args = []) {
+	public function getCell($query, array $args = [])
+	{
 		$stmt = $this->query($query, $args);
 		return $stmt->fetchColumn();
-	}	
+	}
 
 	/**
 	 * Get columns as 1d array
 	 * @return array Empty array on failure
 	 */
-	public function getCol($query, array $args = []) {
+	public function getCol($query, array $args = [])
+	{
 		$out = [];
 		foreach ($this->getAll($query, $args) as $row) {
 			$row = array_values($row);
@@ -264,7 +289,8 @@ class Db {
 	* Run query and get results as keys for quick lookups (hashmap kind-of)
 	* @return array map[key]=1
 	*/
-	public function getColMap($key, $query, array $args = [], $unique=true) {
+	public function getColMap($key, $query, array $args = [], $unique=true)
+	{
 		$output = [];
 
 		$stmt = $this->query($query, $args);
@@ -282,7 +308,8 @@ class Db {
 	 * Begin new transaction.
 	 * @return DbTxn
 	 */
-	public function txn() {
+	public function txn()
+	{
 		if ($this->db->beginTransaction() === false) {
 			user_error("db: Failed starting txn");
 		}
@@ -293,14 +320,17 @@ class Db {
 /**
  * Transaction abstraction.
  */
-class DbTxn {
+class DbTxn
+{
 	private $db;
 	private $done;
 
-	public function __construct($db) {
+	public function __construct($db)
+	{
 		$this->db = $db;
 	}
-	public function __destruct() {
+	public function __destruct()
+	{
 		if (! $this->done) {
 			error_log("WARN: Transaction never finished!");
 			$this->rollback();
@@ -310,7 +340,8 @@ class DbTxn {
 	/**
 	 * Save (Commit) changes in transaction to DB.
 	 */
-	public function commit() {
+	public function commit()
+	{
 		$this->db->commit();
 		$this->done = true;
 	}
@@ -318,9 +349,9 @@ class DbTxn {
 	/**
 	 * Cancel (rollback) changes in transaction.
 	 */
-	public function rollback() {
+	public function rollback()
+	{
 		$this->db->rollback();
 		$this->done = true;
 	}
 }
-
