@@ -10,6 +10,7 @@ namespace core;
 class Error
 {
 	private static $handler = null;
+	private static $handlex = null;
 
 	public static function mute()
 	{
@@ -18,6 +19,9 @@ class Error
 		}
 		self::$handler = set_error_handler(function ($errno, $errstr, $errfile, $errline) {
 			//error_log("Error::mute ($errfile:$errline) $errno: $errstr";);
+			return true;
+		});
+		self::$handlex = set_exception_handler(function ($e) {
 			return true;
 		});
 		return self::$handler;
@@ -30,7 +34,10 @@ class Error
 		}
 
 		$handler = self::$handler;
+		$handlex = self::$handlex;
 		self::$handler = null;
+		self::$handlex = null;
+		set_exception_handler($handlex);
 		return set_error_handler($handler);
 	}
 }

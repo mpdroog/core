@@ -1,6 +1,6 @@
 <?php
 namespace core;
-use prj\Global;
+use prj\Shared;
 use core\Db;
 use core\Res;
 use core\Env;
@@ -15,12 +15,12 @@ const STRATEGY_24H_ADD = "STRATEGY_24H_ADD";
  */
 class Abuse {
         public static function whitelisted($ip) {
-            return in_array($ip, []); // TODO: Global::whitelist() ?
+            return in_array($ip, []); // TODO: Shared::whitelist() ?
         }
 
         public static function incr($ip, $max=60, $strategy = STRATEGY_24H_WAIT) {
             $now = time();
-            $db = Global::Db();
+            $db = Shared::Db();
             if ($strategy === STRATEGY_24H_WAIT) {
                 $db->exec(
                     "DELETE FROM abuselimit WHERE ratelimit_time_updated < ?",
