@@ -96,4 +96,12 @@ class Mailchimp
 	{
 		return $this->call("POST", "/batches", $opts);
 	}
+	public function delete_member($email, $opts)
+	{
+		return $this->call(
+			"DELETE",
+			"/lists/%s/members/" . md5($email),
+			$opts
+		);
+	}
 }
