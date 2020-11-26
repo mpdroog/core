@@ -1,19 +1,23 @@
 <?php
 namespace core;
+
 use prj\Shared;
 
 /** Hack to clear lock on shutdown. */
-class SyncShutdown {
+class SyncShutdown
+{
 	private $db;
 	private $key;
 	private $time;
 
-	public function __construct($db, $key) {
+	public function __construct($db, $key)
+	{
 		$this->db = $db;
 		$this->key = $key;
 		$this->time = time();
 	}
-	public function __destruct() {
+	public function __destruct()
+	{
 		$diff = time() - $this->time;
 		if ($diff > 60*5) {
 			error_log(sprintf("WARN: Cron(%s) took long, %s min!", $this->key, $diff/60));
@@ -31,11 +35,13 @@ class SyncShutdown {
 }
 
 /** CLI Helpers */
-class Cli {
+class Cli
+{
 	private static $_conf = null;
 
 	/** Please never call this func, it's used with init-cli.php */
-	public static function init(array $conf) {
+	public static function init(array $conf)
+	{
 		if (self::$_conf !== null) {
 			user_error("Cli::init() called twice?");
 		}
@@ -43,10 +49,11 @@ class Cli {
 	}
 
 	/** Ensure we're the only cron running this task */
-	public static function platform_lock($key) {
+	public static function platform_lock($key)
+	{
 		global $EXITHACK;
 		// Sleep random so we're not racing on all machines.
-		$rand = mt_rand(1,5);
+		$rand = mt_rand(1, 5);
 		msg("Random wait $rand sec");
 		sleep($rand);
 
@@ -77,7 +84,8 @@ class Cli {
 	}
 
 	/** Ask if user is sure */
-	public static function confirm($msg, $default = false) {
+	public static function confirm($msg, $default = false)
+	{
 		// Display
 		{
 			$defaultMsg = "[y|N]";
@@ -90,7 +98,7 @@ class Cli {
 		// Read
 		$ok = false;
 		{
-			$handle = fopen ("php://stdin","r");
+			$handle = fopen("php://stdin", "r");
 			$line = fgets($handle);
 			echo "\n";
 			$cmp = strtolower(trim($line));
@@ -104,20 +112,24 @@ class Cli {
 	}
 
 	/** Show simple heading */
-	public static function heading($msg) {
+	public static function heading($msg)
+	{
 		echo "\n$msg\n=====================\n";
 	}
 
 	/** Show aligned text. */
-	public static function align($key, $value) {
+	public static function align($key, $value)
+	{
 		$mask = "%15.15s | %s\n";
 		echo sprintf($mask, $key, $value);
 	}
-	public static function text($msg) {
+	public static function text($msg)
+	{
 		echo $msg . "\n";
 	}
 
-	public static function cli() {
+	public static function cli()
+	{
 		$ret = self::$_conf;
 		if ($ret === null) {
 			var_dump(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3));
@@ -126,18 +138,21 @@ class Cli {
 		return $ret;
 	}
 
-	public static function error($msg) {
+	public static function error($msg)
+	{
 		$fd = fopen('php://stderr', 'w+');
 		fwrite($fd, "$msg\n");
 		fclose($fd);
 	}
 
-	public static function can_write() {
+	public static function can_write()
+	{
 		$cli = self::cli();
 		return isset($cli["flags"]["w"]) ? $cli["flags"]["w"] : false;
 	}
 
-	public static function exec($program, array $args = []) {
+	public static function exec($program, array $args = [])
+	{
 		$fds = [
 			0 => ["pipe", "r"],
 			1 => ["pipe", "w"],

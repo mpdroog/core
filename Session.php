@@ -1,5 +1,6 @@
 <?php
 namespace core;
+
 use core\AES;
 use core\Helper;
 use prj\Shared;
@@ -7,9 +8,11 @@ use prj\Shared;
 /**
  * Session helpers.
  */
-class Session {
+class Session
+{
 	/* Check valid UUID, return user.id */
-	private static function check_uuid($uuid, $counter) {
+	private static function check_uuid($uuid, $counter)
+	{
 		return Shared::db()->getCell(
 			"SELECT
 				id
@@ -24,7 +27,8 @@ class Session {
 	}
 
 	/* Read 'raw' session from cookie */
-	public static function session() {
+	public static function session()
+	{
 		if (! isset($_COOKIE["sessid"])) {
 			return false;
 		}
@@ -43,7 +47,8 @@ class Session {
 	}
 
 	/* Require session and return session (on no session return 401 and stop) */
-	public static function req() {
+	public static function req()
+	{
 		$sess = self::session();
 		if (! $sess) {
 			Res::error(401);
@@ -54,7 +59,8 @@ class Session {
 	}
 
 	/* Create sess-string for auto-login/cookie. */
-	public static function create_key($uuid, $counter) {
+	public static function create_key($uuid, $counter)
+	{
 		$privkey = Helper::config("security")["aeskey"];
 		return AES::encode_url(json_encode([
 			"uuid" => $uuid,
@@ -63,7 +69,8 @@ class Session {
 	}
 
 	/** Create cookie and begin session. */
-	public static function begin($uuid, $counter) {
+	public static function begin($uuid, $counter)
+	{
 		$sess = json_encode([
 			"uuid" => $uuid,
 			"counter" => $counter,
@@ -87,7 +94,8 @@ class Session {
 	}
 
 	/** Delete cookie and stop session. */
-	public static function destroy() {
+	public static function destroy()
+	{
 		$domain = Helper::config("general")["domain"];
 		$ok = setcookie(
 			"sessid",
