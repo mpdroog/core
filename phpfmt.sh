@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 # Auto-format PHP
 set +e
 if [ ! -f "php-cs-fixer" ]; then
