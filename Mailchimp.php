@@ -55,7 +55,7 @@ class Mailchimp
 		$http = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		$contentType = curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
 		$ct = "text/plain";
-		if (substr($contentType, 0, strlen(self::MIME_JSON)) === self::MIME_JSON) {
+		if ($http !== 204 && substr($contentType, 0, strlen(self::MIME_JSON)) === self::MIME_JSON) {
 			$res = json_decode($res, true);
 			if (! is_array($res) && !$allownull) {
 				error_log("WARN: json body but got non-JSON?");
