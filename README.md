@@ -49,6 +49,17 @@ error_reporting = E_ALL
 default_charset = "UTF-8"
 ; Block URL calls with fopen
 allow_url_fopen = Off
+allow_url_include = Off
+
+; Limit 30sec (slower script should be optimized/rewritten)
+max_input_time = 30
+max_execution_time = 30
+; Limit 8MB
+memory_limit = 8M
+
+; Limit input flood
+post_max_size = 256K
+max_input_vars = 100
 
 [Date]
 ; Set timezone
