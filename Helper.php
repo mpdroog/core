@@ -21,7 +21,11 @@ class Helper
 
 		foreach ($files as $file) {
 			if (file_exists($file)) {
-				return json_decode(file_get_contents($file), true);
+				$res = json_decode(file_get_contents($file), true);
+				if (! is_array($res)) {
+					user_error(sprintf("Helper::config(%s): File could not be decoded to array.", $file));
+				}
+				return $res;
 			}
 		}
 		user_error(sprintf("Helper::config(%s): File does not exist.", $name));
