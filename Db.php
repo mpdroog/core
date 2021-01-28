@@ -43,6 +43,41 @@ trait DbOrm
 	}
 
 	/**
+	 * Experimental function.
+	 * Please update select..insert or update instead of insert ignore
+	 * if you have no racing condition situations as this func surpresses
+	 * duplicatekey/insert issues when they occur!
+	 */
+        public function insertIgnore($table, array $keyValue, $return_idx=true) {
+                $values = [];
+                $fields = [];
+                foreach (array_keys($keyValue) as $key) {
+                        $fields[] = "`$key`";
+                        $values[] = "?";
+                }
+
+                $query = sprintf(
+                        "INSERT IGNORE INTO `%s` (%s) VALUES(%s)",
+                        $table,
+                        implode(", ", $fields),
+                        implode(", ", $values)
+                );
+                $stmt = $this->query($query, array_values($keyValue));
+                if ($stmt->rowCount() != 1) {
+                        user_error("Insert did not affect the DB?");
+                }
+                if ($return_idx === false) {
+                        return -1;
+                }
+
+                $idx = $this->db->lastInsertId();
+                if (! is_numeric($idx) || $idx === "0") {
+                        user_error("Failed reading insert id");
+                }
+                return $idx;
+        }
+	
+	/**
 	 * Insert on new else update
 	 */
 	public function insertUpdate($table, array $keyValue, array $onUpdate)
