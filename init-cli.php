@@ -85,7 +85,9 @@ function msg($msg, array $args = [])
 }
 
 if (! isset($_CLI["flags"]["w"]) && !$_CLI["test"]) {
-	echo "WARN: Running in Read/Only Mode, add -w (write) flag.\n";
+        if (! defined("HIDE_READONLY")) {
+		echo "WARN: Running in Read/Only Mode, add -w (write) flag.\n";
+	}
 }
 if ($verbose) {
 	var_dump($_CLI);
