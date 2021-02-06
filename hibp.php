@@ -24,7 +24,7 @@ class HIBP
 		$http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		curl_close($ch);
 		if ($http_code !== 200) {
-			user_error("hibp(%s) http=%d err=%s\n", $pass, $http_code, $res);
+			user_error(sprintf("hibp(%s) http=%d err=%s\n", $pass, $http_code, $res));
 		}
 
 		foreach (explode("\r\n", $res) as $line) {
