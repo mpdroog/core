@@ -34,7 +34,7 @@ open_basedir = /path/to/project
 ; Limit the allowed functions
 ; 1) No shell executes
 ; 2) No ini parsing/source show or rot13 (used by hackkits)
-disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_multi_exec,parse_ini_file,show_source,str_rot13,dl,ini_set,php_ini_loaded_file,php_ini_scanned_files,zend_version,gc_disable,phpinfo,phpversion,putenv,php_uname,php_logo_guid,get_current_user,get_loaded_extensions,phpversion,ord,mail
+disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_multi_exec,parse_ini_file,show_source,str_rot13,dl,ini_set,php_ini_loaded_file,php_ini_scanned_files,zend_version,gc_disable,phpinfo,phpversion,putenv,php_uname,php_logo_guid,get_current_user,get_loaded_extensions,phpversion,ord,mail,highlight_file,ignore_user_abort,highlight_file
 
 ; Hide PHP-details
 expose_php = Off
