@@ -8,9 +8,9 @@ class Dates
 	//
 	// @param int $date unixtimestamp
 	// @param int $step step * 5min
-	public static function consolidate($date, $step)
+	public static function consolidate($date, $step = null)
 	{
-		$step = 60 * 5 * $step; // 5min intervals
+		if ($step === null) $step = 60 * 5 * $step; // 5min intervals
 		$addl = $date % $step;
 		return $date - $addl;
 	}
