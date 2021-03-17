@@ -86,4 +86,3 @@ class Strings
 		return mb_substr($text, $off, $e-$off);
 	}
 }
-}
