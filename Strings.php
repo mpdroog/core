@@ -72,4 +72,18 @@ class Strings
 		}
 		return $text;
 	}
+	
+	public static function between($text, $from, $to)
+	{
+		$b = mb_strpos($text, $from);
+		$e = mb_strpos($text, $to, $b+strlen($from));
+		if ($b === false || $e === false) {
+			var_dump($text);
+			var_dump(["b" => $b, "e" => $e]);
+			user_error("failed parsing html positions(0).");
+		}
+		$off = $b+strlen($from);
+		return mb_substr($text, $off, $e-$off);
+	}
+}
 }
