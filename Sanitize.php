@@ -27,6 +27,13 @@ trait SanitizeStrippers
 	{
 		return htmlspecialchars(strip_tags($txt));
 	}
+	/**
+	 * Replace non-ASCII with ASCII version else strip.
+	 */
+	public static function translit($txt)
+	{
+		return iconv('utf-8', 'us-ascii//TRANSLIT', $txt);
+	}
 }
 
 class Sanitize
