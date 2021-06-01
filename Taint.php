@@ -257,7 +257,7 @@ class Taint
 				}
 			}
 			if ($ok) {
-				$output["val"][] = $val;
+				$output["val"][$idx] = $val;
 			}
 		}
 
