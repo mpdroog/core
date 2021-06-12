@@ -112,10 +112,10 @@ class Env
 
 	// Read HFast-path
 	public static function hfastPath()
-	{
-		$path = str_replace('/action/', '', self::$server["DOCUMENT_URI"]);
-		return str_replace("..", "", $path);
-	}
+        {
+                $sane = preg_replace("/[^A-Za-z0-9_\/]/", "", self::$server["DOCUMENT_URI"]);
+                return str_replace('/action/', '', $sane);
+        }
 	
 	public static function method()
 	{
