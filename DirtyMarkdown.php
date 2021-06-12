@@ -54,10 +54,10 @@ class DirtyMarkdown
 	}
 
 	/* Convert 'simple' Markdown-syntaxis to HTML email */
-	public static function parse($input)
+	public static function parse($fmt, $input)
 	{
 		$lines = [];
-		$lines[] = self::section_begin();
+		$lines[] = self::section_begin($fmt);
 
 		$prev_newline = false;
 		foreach (mb_split("\n", $input) as $line) {
@@ -66,22 +66,22 @@ class DirtyMarkdown
 				// H1. =====
 				// Override previous line
 				$prev = count($lines)-1;
-				$lines[$prev] = self::heading($lines[$prev]);
+				$lines[$prev] = self::heading($fmt, $lines[$prev]);
 				continue;
 			}
 
 			$link = self::is_link($line);
 			if ($link) {
 				// A. [....](..)
-				$line = $link["pre"] . self::link($link["url"], $link["txt"]) . $link["post"];
+				$line = $link["pre"] . self::link($fmt, $link["url"], $link["txt"]) . $link["post"];
 			}
 
 			if (self::is_newline($line)) {
 				// New block?
 				if ($prev_newline) {
 					// Yes, begin new section
-					$lines[] = self::section_end();
-					$lines[] = self::section_begin();
+					$lines[] = self::section_end($fmt);
+					$lines[] = self::section_begin($fmt);
 					continue;
 				} else {
 					// No, remember to see if next is also newline
@@ -100,7 +100,7 @@ class DirtyMarkdown
 			$lines[] = $line;
 		}
 
-		$lines[] = self::section_end();
+		$lines[] = self::section_end($fmt);
 		return implode("", $lines);
 	}
 }
