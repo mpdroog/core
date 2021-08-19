@@ -121,4 +121,8 @@ class Env
 	{
 		return self::$server["REQUEST_METHOD"];
 	}
+	
+	public static function url_full() {
+		return "https://" . self::$server['HTTP_HOST'] . self::$server['REQUEST_URI'] ?? '' . "?" . self::$server['QUERY_STRING'] ?? "";
+	}
 }
