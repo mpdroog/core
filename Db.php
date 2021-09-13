@@ -184,14 +184,15 @@ class Db
 	 */
 	public function __construct($dsn, $user, $pass)
 	{
-		$this->db = new \PDO($dsn, $user, $pass, []);
+		$this->db = new \PDO($dsn, $user, $pass, [\PDO::ATTR_TIMEOUT => 5]);
 		$this->db->setAttribute(
 			\PDO::ATTR_ERRMODE,
 			\PDO::ERRMODE_EXCEPTION
 		);
 		$db = explode(":", $dsn)[0];
 		if ($db === "mysql") {
-			$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'");
+			$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'"); // Strict input mode
+			$this->db->query("SET SESSION max_statement_time=3"); // Stop query after N-sec
 		} elseif ($db === "sqlite") {
 			// sqlite
 			$this->db->query("PRAGMA strict=ON");
