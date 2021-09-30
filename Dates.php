@@ -43,4 +43,11 @@ class Dates
 		$datediff = $to - $from;
 		return round($datediff / (60 * 60 * 24));
 	}
+	
+        // Get hours between $from-$to (unixtimestamps)
+        public static function hours($from, $to)
+        {
+                $datediff = $to - $from;
+                return round($datediff / (60 * 60));
+        }
 }
