@@ -71,6 +71,7 @@ unset($_POST);
 unset($_SERVER);
 define("VERBOSE", $verbose);
 define("WRITE", isset($_CLI["flags"]["w"]));
+define("DEBUG", isset($_CLI["flags"]["d"]));
 
 function msg($msg, array $args = [])
 {
