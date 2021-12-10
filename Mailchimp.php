@@ -86,9 +86,28 @@ class Mailchimp
 	}
 	public function patch_member($email, $opts)
 	{
+		if (! isset($opts["merge_fields"])) {
+			user_error("Mailchimp::patch_member misses merge_fields in opts-var");
+		}
+		if (! isset($opts["language"])) {
+			user_error("Mailchimp::patch_member misses language in opts-var")
+		}
 		return $this->call(
 			"PATCH",
 			"/lists/%s/members/" . md5($member["email_address"]),
+			$opts
+		);
+	}
+	public function put_member($email, $opts) {
+		if (! isset($opts["merge_fields"])) {
+			user_error("Mailchimp::put_member misses merge_fields in opts-var");
+		}
+		if (! isset($opts["language"])) {
+			user_error("Mailchimp::put_member misses language in opts-var")
+		}
+		return $this->call(
+			"PUT",
+			"/lists/%s/members/" . md5($email),
 			$opts
 		);
 	}
