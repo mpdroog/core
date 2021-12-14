@@ -13,6 +13,31 @@ class DNS
 		return mb_substr($email, 1+$idx);
 	}
 
+        /**
+         * Create array of all parent domains.
+         * example: $domain="kells.anonaddy.com" converts into $domains=["kells.anonaddy.com", "anonaddy.com"]
+         * @return false|array false-value on domains containing more than 10 dots
+         */
+        public static function domains_all($domain) {
+                $domains = [$domain];
+
+                $last = $domain;
+                $i = 0;
+                for (; $i < 10; $i++) {
+                        $pos = mb_strpos($last, ".");
+                        if ($pos === false) break;
+
+                        $last = mb_substr($last, $pos+1);
+                        $domains[] = $last;
+                }
+                if ($i === 9) {
+                        return false;
+                }
+
+                // Strip off TLD
+                return array_slice($domains, 0, count($domains)-1);
+        }
+	
 	/**
 	 * Get MX-records for given domain - with A-record fallback (recursive func)
 	 * TODO: Delete?
