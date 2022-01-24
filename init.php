@@ -28,4 +28,6 @@ register_shutdown_function("report_fatal");
 # Encoding
 mb_internal_encoding("UTF-8");
 
-define("ROOT", realpath(dirname(__FILE__) . "/../../../"));
+if (! defined("ROOT")) {
+        define("ROOT", realpath(dirname(__FILE__) . "/../../../"));
+}
