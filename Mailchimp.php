@@ -90,7 +90,7 @@ class Mailchimp
 			user_error("Mailchimp::patch_member misses merge_fields in opts-var");
 		}
 		if (! isset($opts["language"])) {
-			user_error("Mailchimp::patch_member misses language in opts-var")
+			user_error("Mailchimp::patch_member misses language in opts-var");
 		}
 		return $this->call(
 			"PATCH",
@@ -103,7 +103,7 @@ class Mailchimp
 			user_error("Mailchimp::put_member misses merge_fields in opts-var");
 		}
 		if (! isset($opts["language"])) {
-			user_error("Mailchimp::put_member misses language in opts-var")
+			user_error("Mailchimp::put_member misses language in opts-var");
 		}
 		return $this->call(
 			"PUT",
