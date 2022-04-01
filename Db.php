@@ -182,13 +182,16 @@ class Db
 	/**
 	 * Create a new persistant conn to the DB.
 	 */
-	public function __construct($dsn, $user, $pass)
+	public function __construct($dsn, $user, $pass, array $attrs = [])
 	{
 		$this->db = new \PDO($dsn, $user, $pass, [\PDO::ATTR_TIMEOUT => 5]);
 		$this->db->setAttribute(
 			\PDO::ATTR_ERRMODE,
 			\PDO::ERRMODE_EXCEPTION
 		);
+                foreach ($attrs as $attr => $val) {
+                        if (! $this->db->setAttribute($attr, $val)) user_error("PDO::setAttr($attr) failed");
+                }
 		$db = explode(":", $dsn)[0];
 		if ($db === "mysql") {
 			$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'"); // Strict input mode
