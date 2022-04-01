@@ -5,7 +5,7 @@ use core\Strings;
 
 class HTTP
 {
-	public static function json($url)
+	public static function json($url, array $opts)
 	{
 		$ch = curl_init($url);
 		$ok = 1;
@@ -19,6 +19,9 @@ class HTTP
 		$ok &= curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		if ($ok !== 1) {
 			user_error("curl_setopt failed");
+		}
+		foreach ($opts as $opt => $val) {
+			if (true !== curl_setopt($ch, $opt, $val)) user_error("curl_setopt $opt failed");
 		}
 
 		$res = curl_exec($ch);
