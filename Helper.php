@@ -14,7 +14,8 @@ class Helper
 	public static function config($name)
 	{
 		$files = [];
-		if (self::client()["test"]) {
+		$cfg = self::client();
+		if (isset($cfg["test"])) {
 			$files[] = ROOT . "/conf.d/$name-test.json";
 		}
 		$files[] = ROOT . "/conf.d/$name.json";
