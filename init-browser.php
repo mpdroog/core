@@ -1,5 +1,4 @@
 <?php
-ini_set('default_charset', 'utf-8');
 require dirname(__FILE__) . "/init.php";
 
 function report($errno, $errstr, $errfile, $errline)
