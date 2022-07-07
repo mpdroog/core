@@ -84,6 +84,9 @@ class Mailchimp
 	{
 		return $this->call("GET", "/lists/%s/members", $opts);
 	}
+	public function member($email, $opts) {
+		return $this->call("GET", "/lists/%s/members/" . md5($email), $opts);
+	}
 	public function patch_member($email, $opts)
 	{
 		if (! isset($opts["merge_fields"])) {
