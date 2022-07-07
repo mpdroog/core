@@ -97,7 +97,7 @@ class Mailchimp
 		}
 		return $this->call(
 			"PATCH",
-			"/lists/%s/members/" . md5($member["email_address"]),
+			"/lists/%s/members/" . md5($email),
 			$opts
 		);
 	}
