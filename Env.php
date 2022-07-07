@@ -122,7 +122,13 @@ class Env
 		return self::$server["REQUEST_METHOD"];
 	}
 	
-	public static function url_full() {
+	public static function url_full()
+	{
 		return "https://" . self::$server['HTTP_HOST'] . self::$server['REQUEST_URI'] ?? '' . "?" . self::$server['QUERY_STRING'] ?? "";
+	}
+
+	public static function ajax()
+	{
+		return isset(self::$server["HTTP_X_REQUESTED_WITH"]) && self::$server["HTTP_X_REQUESTED_WITH"] === "XMLHttpRequest";
 	}
 }
