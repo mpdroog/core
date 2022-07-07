@@ -23,6 +23,12 @@ class Hook
 
 	public static function trigger($name, array $args)
 	{
+		if (! isset(self::$hooks[$name])) {
+			error_log(sprintf("Hook(%s) dropped, no listeners", $name));
+			return;
+		}
+
+		$args["_hook"] = $name;
 		foreach (self::$hooks[$name] as $fn => $meta) {
 			require $fn;
 		}
