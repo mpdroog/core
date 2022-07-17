@@ -131,4 +131,10 @@ class Env
 	{
 		return isset(self::$server["HTTP_X_REQUESTED_WITH"]) && self::$server["HTTP_X_REQUESTED_WITH"] === "XMLHttpRequest";
 	}
+
+	public static function referer_check() {
+		$domain = str_replace("https://", "", str_replace("http://", "", self::$server["HTTP_REFERER"]));
+		$domain = substr($domain, 0, strpos($domain, "/"));
+		return $domain === self::$server["SERVER_NAME"];
+	}
 }
