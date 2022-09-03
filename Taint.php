@@ -18,7 +18,7 @@ trait TaintValidators
 	 */
 	private static function email($val)
 	{
-		return filter_var($val, FILTER_VALIDATE_EMAIL);
+		return false !== filter_var($val, FILTER_VALIDATE_EMAIL);
 	}
 	private static function cmp($val)
 	{
