@@ -64,7 +64,7 @@ trait DbOrm
                 );
                 $stmt = $this->query($query, array_values($keyValue));
                 if ($stmt->rowCount() != 1) {
-                        user_error("Insert did not affect the DB, query=$query");
+                        return -1;
                 }
                 if ($return_idx === false) {
                         return -1;
