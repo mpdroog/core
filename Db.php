@@ -63,9 +63,6 @@ trait DbOrm
                         implode(", ", $values)
                 );
                 $stmt = $this->query($query, array_values($keyValue));
-                if ($stmt->rowCount() != 1) {
-                        return -1;
-                }
                 if ($return_idx === false) {
                         return -1;
                 }
