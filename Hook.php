@@ -30,7 +30,10 @@ class Hook
 
 		$args["_hook"] = $name;
 		foreach (self::$hooks[$name] as $fn => $meta) {
-			require $fn;
+			$tok = require $fn;
+			if ($tok === "STOP") {
+				break;
+			}
 		}
 	}
 }
