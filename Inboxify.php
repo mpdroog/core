@@ -35,6 +35,7 @@ public static function lists() {
 }
 
 public static function contacts($list, $filter_unsub=false, $offset=0, $limit=20, $sort="ASC") {
+    if ($list === "{list}") $list = self::$config["list"]);
     $list = rawurlencode($list);
     $query = "/contacts/$list/?offset=$offset&limit=$limit&sort=$sort";
     if ($filter_unsub) $query .= "&unsubscribed=True";
@@ -49,6 +50,7 @@ public static function contacts($list, $filter_unsub=false, $offset=0, $limit=20
 
 /** Bulk insert N-contacts into list */
 public static function bulk_insert($list, array $contacts, $overwrite) {
+    if ($list === "{list}") $list = self::$config["list"]);
     $list = rawurlencode($list);
     if (count($contacts) > 1000) user_error("bulk_insert limited to 1000-contacts at a time");
 
@@ -80,6 +82,7 @@ public static function api($method, $path, $data = null) {
 }
 
 public static function feedback($list, $changeType) {
+    if ($list === "{list}") $list = self::$config["list"]);
     if (! in_array($changeType, ["created", "updated", "unsubscribed", "deleted"])) user_error("No such changeType=$changeType");
     $list = rawurlencode($list);
     $res = self::api("GET", "/contacts/$list/$changeType");
@@ -91,6 +94,7 @@ public static function feedback($list, $changeType) {
 }
 
 public static function delete_contact($list, $idOrEmail) {
+    if ($list === "{list}") $list = self::$config["list"]);
     $list = rawurlencode($list);
     $idOrEmail = rawurlencode($idOrEmail);
     $res = self::api("DELETE", "/contacts/$list/$idOrEmail");
