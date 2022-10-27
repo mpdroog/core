@@ -15,6 +15,10 @@ class Inboxify {
     {
         self::$config = $cfg;
     }
+    public static function default_list()
+    {
+        return self::$config["list"];
+    }
 
 /** Create headers for Signature based authentication */
 private static function sig() {
