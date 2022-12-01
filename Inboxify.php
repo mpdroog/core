@@ -34,7 +34,6 @@ private static function sig() {
 
 public static function lists() {
     $res = self::api("GET", "/lists", null);
-    // TODO: Http-statuscode check?
     return $res["body"];
 }
 
@@ -49,7 +48,10 @@ public static function contacts($list, $filter_unsub=false, $offset=0, $limit=20
         var_dump($res);
         user_error("Inboxify/contacts invalid res");
     }
-    return $res["body"];
+    return [
+        "items" => $res["body"],
+	"total" => $res["head"]["x-total-count"][0],
+    ];
 }
 
 /** Bulk insert N-contacts into list */
@@ -97,6 +99,21 @@ public static function feedback($list, $changeType) {
     return $res["body"];
 }
 
+public static function update_contact($list, $idOrEmail, array $contact) {
+    if ($list === "{list}") $list = self::$config["list"];
+    $list = rawurlencode($list);
+    $idOrEmail = rawurlencode($idOrEmail);
+    $res = self::api("PUT", "/contacts/$list/$idOrEmail", $contact);
+    if ($res["http"] === 404) {
+        return false;
+    }
+    if ($res["http"] !== 200) {
+        var_dump($res);
+        user_error("Inboxify/delete invalid res");
+    }
+    return true;
+}
+
 public static function delete_contact($list, $idOrEmail) {
     if ($list === "{list}") $list = self::$config["list"];
     $list = rawurlencode($list);
@@ -110,20 +127,5 @@ public static function delete_contact($list, $idOrEmail) {
         user_error("Inboxify/delete invalid res");
     }
     return true;
-}
-    
-    public static function get_contact($list, $idOrEmail) {
-    if ($list === "{list}") $list = self::$config["list"];
-    $list = rawurlencode($list);
-    $idOrEmail = rawurlencode($idOrEmail);
-    $res = self::api("GET", "/contacts/$list/$idOrEmail");
-    if ($res["http"] === 404) {
-        return false;
-    }
-    if ($res["http"] !== 200) {
-        var_dump($res);
-        user_error("Inboxify/delete invalid res");
-    }
-    return $res["body"];
 }
 }
