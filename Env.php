@@ -133,8 +133,8 @@ class Env
 	}
 
 	public static function referer_check() {
-		$domain = str_replace("https://", "", str_replace("http://", "", self::$server["HTTP_REFERER"]));
+		$domain = str_replace("https://", "", str_replace("http://", "", self::$server["HTTP_REFERER"]??""));
 		$domain = substr($domain, 0, strpos($domain, "/"));
-		return $domain === self::$server["SERVER_NAME"];
+		return $domain === (self::$server["SERVER_NAME"] ?? "");
 	}
 }
