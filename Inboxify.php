@@ -72,6 +72,21 @@ public static function bulk_insert($list, array $contacts, $overwrite) {
     return $res["body"];
 }
 
+/** Bulk unsubscribe N-contacts into list */
+public static function bulk_unsubscribe($list, array $contacts) {
+    if ($list === "{list}") $list = self::$config["list"];
+    $list = rawurlencode($list);
+    if (count($contacts) > 1000) user_error("bulk_unsubscribe limited to 1000-contacts at a time");
+
+    $args = "";
+    $res = self::api("POST", "/contacts/$list/bulk-unsubscribe?$args", $contacts);
+    if ($res["http"] !== 200) {
+        var_dump($res);
+        user_error("Inboxify/contacts invalid res");
+    }
+    return $res["body"];
+}
+
 /** Call HTTP-endpoint through cURL */
 public static function api($method, $path, $data = null) {
     $opts = [
