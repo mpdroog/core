@@ -137,4 +137,7 @@ class Env
 		$domain = substr($domain, 0, strpos($domain, "/"));
 		return $domain === (self::$server["SERVER_NAME"] ?? "");
 	}
+	public static function referer() {
+                return self::$server["HTTP_REFERER"] ?? null;
+        }
 }
