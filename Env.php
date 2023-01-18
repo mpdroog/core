@@ -140,4 +140,10 @@ class Env
 	public static function referer() {
                 return self::$server["HTTP_REFERER"] ?? null;
         }
+
+        public static function userPass() {
+                $requser = Env::$server["PHP_AUTH_USER"] ?? "";
+                $reqpass = self::$server["PHP_AUTH_PW"] ?? "";
+                return [$requser, $reqpass];
+        }
 }
