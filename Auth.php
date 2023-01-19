@@ -16,6 +16,8 @@ class Auth {
                 // ldap_set_option(NULL, LDAP_OPT_DEBUG_LEVEL, 7);
                 ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
                 ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
+                ldap_set_option($ldapconn, LDAP_OPT_NETWORK_TIMEOUT, 3);
+                ldap_set_option($ldapconn, LDAP_OPT_TIMELIMIT, 3);
 
                 Error::mute();
                 $bind = ldap_bind($ldapconn, sprintf($cfg['basedn'], $loginPass[0]), $loginPass[1]);
