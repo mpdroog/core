@@ -143,4 +143,18 @@ public static function delete_contact($list, $idOrEmail) {
     }
     return true;
 }
+public static function contact($list, $idOrEmail) {
+    if ($list === "{list}") $list = self::$config["list"];
+    $list = rawurlencode($list);
+    $idOrEmail = rawurlencode($idOrEmail);
+    $res = self::api("GET", "/contacts/$list/$idOrEmail");
+    if ($res["http"] === 404) {
+        return false;
+    }
+    if ($res["http"] !== 200) {
+        var_dump($res);
+        user_error("Inboxify/delete invalid res");
+    }
+    return $res["body"];
+}
 }
