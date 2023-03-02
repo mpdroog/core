@@ -24,7 +24,6 @@ class Convert
 		if ($kv === null || $kv === false) {
 			user_error("fgetcsv(temp) failed");
 		}
-		$kv = fgetcsv($fp);
 		if (substr($kv[0], 0, strlen("sep=")) === "sep=") {
 			$kv = fgetcsv($fp); // ignore sep= line
 		}
