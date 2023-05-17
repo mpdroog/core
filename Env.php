@@ -146,4 +146,8 @@ class Env
                 $reqpass = self::$server["PHP_AUTH_PW"] ?? "";
                 return [$requser, $reqpass];
         }
+
+	public static function host() {
+		return self::$server['HTTP_HOST'];
+	}
 }
