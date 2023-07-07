@@ -42,8 +42,18 @@ class Res
 	/** HTTP Redirect */
 	public static function redirect($relative)
 	{
-		$base = Helper::config("general")["baseurl"];
-		header(sprintf("Location: %s/%s", $base, $relative), true, 303);
+                $base = "https://" . Env::host();
+                $allowed = Helper::config("general")["baseurl"];
+                if (is_array($allowed)) {
+                        // Check if whitelisted for multi-domain site
+                        if (! in_array($base, $allowed)) {
+                                user_error("CRIT: Invalid domain given by user=$base");
+                        }
+                } else {
+                        // Just force as 1 domain
+                        $base = $allowed;
+                }
+                header(sprintf("Location: %s/%s", $base, $relative), true, 303);
 	}
 	/** HTTP redirect to external domain */
 	public static function redirect_external($url, $allowHTTP=false)
