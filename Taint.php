@@ -282,7 +282,7 @@ class Taint
 			$d2[$k] = $v;
 		}
 		$data = $d2;
-	
+
 		$count = 0;
 		foreach ($fields as $field) {
 			// Check if field exists
@@ -335,6 +335,10 @@ class Taint
 			} else {
 				if ($val === "" && in_array("opt", $rules[$field])) {
 					// Optional field and no value, skip
+					continue;
+				}
+				if (in_array("fragment", $rules[$field]) || in_array("subarray", $rules[$field]) || in_array("array", $rules[$field])) {
+					$errors[] = "notarray.$field";
 					continue;
 				}
 
