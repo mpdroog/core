@@ -150,4 +150,10 @@ class Env
 	public static function host() {
 		return self::$server['HTTP_HOST'];
 	}
+
+        /** environment variable */
+        public static function var($key)
+        {
+                return getenv($key);
+        }
 }
