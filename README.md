@@ -74,6 +74,8 @@ session.name = sess
 session.cookie_httponly = On
 ; https only
 session.cookie_secure = On
+; SessionDB to properly serialize for textual storage
+session.serialize_handler = php_serialize
 ```
 
 sql.abuselimit
