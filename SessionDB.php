@@ -1,5 +1,5 @@
 <?php
-namespace prj;
+namespace core;
 
 /**
  * Override default PHP session handler with custom one that uses database.
@@ -81,10 +81,13 @@ class SessionDB implements \SessionHandlerInterface
 	{
 		return 1 === preg_match("/^[a-z0-9_\-]{2,}$/i", $val);
 	}
+
     public static function init($db)
     {
-        ini_set("session.serialize_handler", "php_serialize"); // use text serializer
-		$handler = new self($db);
-		session_set_save_handler($handler, true);
+	if (\ini_get("session.serialize_handler") !== "php_serialize") {
+        	\ini_set("session.serialize_handler", "php_serialize"); // use text serializer
+	}
+	$handler = new self($db);
+	\session_set_save_handler($handler, true);
     }
 }
