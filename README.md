@@ -79,7 +79,7 @@ session.serialize_handler = php_serialize
 ```
 
 sql.abuselimit
-```
+```mysql
 CREATE TABLE `abuselimit` (
   `ratelimit_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `ratelimit_ip` varchar(80) NOT NULL,
@@ -89,4 +89,15 @@ CREATE TABLE `abuselimit` (
   PRIMARY KEY (`ratelimit_id`),
   UNIQUE KEY `unique_ip` (`ratelimit_ip`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+```
+sql.session
+```mysql
+CREATE TABLE `session` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `path` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `value` binary(255) NOT NULL,
+  `tm_updated` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_path` (`path`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 ```
