@@ -9,7 +9,7 @@ class Auth {
                 if (strlen($loginPass[0]) === 0) return false;
                 if (strlen($loginPass[1]) === 0) return false;
 
-                $ldapconn = ldap_connect($cfg['host'], $cfg['port']);
+                $ldapconn = ldap_connect($cfg['host']);
                 if ($ldapconn === false) {
                         user_error("ldap_connect failed");
                 }
