@@ -285,6 +285,7 @@ class Taint
 
 		$count = 0;
 		foreach ($fields as $field) {
+			if ($field === "ignore_extra") continue;
 			// Check if field exists
 			if (! isset($data[ $field ])) {
 				if (in_array("opt", $rules[$field])) {
@@ -370,7 +371,8 @@ class Taint
 			$out->$field = $val;
 		}
 
-		if ($count !== count($data)) {
+		$ignore = $out->ignore_extra ?? false;
+		if ($count !== count($data) && !$ignore) {
 			// More fields than $out, find out which
 			foreach (array_keys($data) as $field) {
 				if (! in_array($field, $fields, true)) {
