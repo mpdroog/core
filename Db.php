@@ -193,6 +193,7 @@ class Db
 		if ($db === "mysql") {
 			$this->db->query("SET SESSION sql_mode = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO,NO_BACKSLASH_ESCAPES'"); // Strict input mode
 			$this->db->query("SET SESSION max_statement_time=3"); // Stop query after N-sec
+			$this->db->query("SET time_zone = '+00:00'"); // Enforce UTC on DB level
 		} elseif ($db === "sqlite") {
 			// sqlite
 			$this->db->query("PRAGMA strict=ON");
