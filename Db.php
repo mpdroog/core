@@ -73,7 +73,7 @@ trait DbOrm
                 }
                 return $idx;
         }
-	
+
 	/**
 	 * Insert on new else update
 	 */
@@ -212,7 +212,7 @@ class Db
 		$this->db = null;
 		Error::unmute();
 	}
-	
+
 	/**
 	 * Run query.
 	 */
@@ -361,6 +361,7 @@ class DbTxn
 {
 	private $db;
 	private $done;
+	public $allow_double = false;
 
 	public function __construct($db)
 	{
@@ -379,6 +380,7 @@ class DbTxn
 	 */
 	public function commit()
 	{
+		if ($this->allow_double && $this->done) return;
 		$this->db->commit();
 		$this->done = true;
 	}
@@ -388,6 +390,7 @@ class DbTxn
 	 */
 	public function rollback()
 	{
+		if ($this->allow_double && $this->done) return;
 		$this->db->rollback();
 		$this->done = true;
 	}
