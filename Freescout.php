@@ -16,18 +16,18 @@ class Freescout {
 		    user_error("curl_init fail");
 		}
 		$opt = 1;
-		$opt &= curl_setopt($ch, CURLOPT_URL, self::$config["base"] . "/api/conversations");
+		$opt &= curl_setopt($ch, CURLOPT_URL, $this->config["base"] . "/api/conversations");
 		$opt &= curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 		$opt &= curl_setopt($ch, CURLOPT_TIMEOUT, 3);
 		$opt &= curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
 		$opt &= curl_setopt($ch, CURLOPT_HTTPHEADER, [
-		    "X-FreeScout-API-Key: " . self::$config["apikey"],
+		    "X-FreeScout-API-Key: " . $this->config["apikey"],
 		    "Content-Type: application/json",
 		    "Accept: application/json",
 		]);
 		$opt &= curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
 		    "type" => "email",
-		    "mailboxId" => self::$config["mboxid"],
+		    "mailboxId" => $this->config["mboxid"],
 		    "subject" => $subject,
 		    "customer" => [
 			"email" => $email,
